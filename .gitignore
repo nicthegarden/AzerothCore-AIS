@@ -1,0 +1,32 @@
+# Build files
+var/build/
+build/
+*.o
+*.so
+*.a
+
+# Data files (large)
+env/dist/data/
+env/dist/bin/dbc/
+env/dist/bin/maps/
+env/dist/bin/mmaps/
+env/dist/bin/vmaps/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Database
+*.sql.backup
