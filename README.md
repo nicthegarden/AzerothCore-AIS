@@ -1,37 +1,73 @@
-# AzerothCore WoW Server - Automated Installation System
+# AzerothCore WoW Server - Debian 13 Automated Installer
 
-Complete automated installation and management system for AzerothCore WoW Server with Playerbots and all popular modules.
+[![License: AGPL](https://img.shields.io/badge/License-AGPL-blue.svg)](https://www.azerothcore.org/)
+[![Debian](https://img.shields.io/badge/Debian-13-red.svg)](https://www.debian.org/)
+[![AzerothCore](https://img.shields.io/badge/AzerothCore-Playerbots-green.svg)](https://www.azerothcore.org/)
 
-## 🚀 Quick Start (All Features Enabled)
+> Complete automated installation system for **AzerothCore Wrath of the Lich King (3.3.5a)** with **Playerbots** and all popular modules on **Debian 13 (Trixie)** Linux.
 
-```bash
-./install.sh
-# Select option 1: "Quick Setup - Enable ALL Features"
-```
+## 📑 Table of Contents
 
-This installs **everything** automatically:
-- ✅ AzerothCore + Playerbots
-- ✅ All 10+ modules
-- ✅ 500-1000 AI bots
-- ✅ All cross-faction features
-- ✅ All quality-of-life improvements
-- ✅ PvP server mode
+- [Overview](#overview)
+- [What's Included](#whats-included)
+- [Quick Start](#quick-start)
+- [Installation Modes](#installation-modes)
+- [Documentation](#documentation)
+- [System Requirements](#system-requirements)
+- [Features](#features)
+- [Usage](#usage)
+- [Troubleshooting](#troubleshooting)
+- [Support](#support)
+- [License](#license)
+
+## 📖 Overview
+
+This repository provides a **comprehensive automated installation system** for running your own World of Warcraft: Wrath of the Lich King (3.3.5a) private server. Based on the popular [AzerothCore](https://www.azerothcore.org/) emulator with the [Playerbots](https://github.com/mod-playerbots/mod-playerbots) module, this script handles everything from system preparation to server management.
+
+### Why Use This Installer?
+
+- ✅ **Fully Automated** - Complete installation with interactive prompts
+- ✅ **All Modules Included** - 10 popular modules ready to install
+- ✅ **Playerbots Support** - AI companions (400-1000+ bots)
+- ✅ **Debian 13 Optimized** - Specifically designed for Debian Trixie
+- ✅ **Production Ready** - Includes database fixes, configurations, and management tools
+- ✅ **Well Documented** - Comprehensive guides and references
 
 ## 📦 What's Included
 
-### Core Features
-- **AzerothCore WotLK**: World of Warcraft 3.3.5a server
-- **Playerbots**: AI companions (500-1000 bots)
-- **Full Module Suite**: 10 additional modules
-- **Cross-Faction**: All features enabled
-- **Auto-Configuration**: IP, database, configs
+### Repository Structure
 
-### Modules (11 Total)
+```
+.
+├── install-azerothcore.sh     ⭐ Main installation script
+├── INSTALL_GUIDE.md           📖 Complete installation guide
+├── SCRIPT_SUMMARY.md          📋 Quick reference summary
+├── CHOICES.md                 📚 Feature & option reference
+├── README.md                  📄 This file
+├── build.txt                  📄 Original manual installation guide
+└── docker/                    🐳 Docker deployment files
+    ├── docker-compose.yml
+    ├── Dockerfile
+    ├── docker-entrypoint.sh
+    └── README.md
+```
+
+### Core Components
+
+| Component | Description |
+|-----------|-------------|
+| **AzerothCore** | World of Warcraft 3.3.5a server emulator |
+| **Playerbots** | AI player companions (400-1000+ bots) |
+| **MySQL/MariaDB** | Database server for game data |
+| **10 Modules** | Additional gameplay features |
+
+### Available Modules
+
 1. **mod-playerbots** (built-in) - AI player companions
 2. **mod-no-hearthstone-cooldown** - Instant hearthstone
 3. **mod-account-mounts** - Account-wide mounts
-4. **mod-arac** - All Races All Classes
-5. **mod-ah-bot-plus** - Auction House bot (15K-35K items)
+4. **mod-arac** - All Races All Classes (Human Druids, etc.)
+5. **mod-ah-bot-plus** - Auction House bot
 6. **mod-transmog** - Transmogrification system
 7. **mod-aoe-loot** - Area of Effect looting
 8. **mod-solo-lfg** - Solo dungeon finder
@@ -39,233 +75,387 @@ This installs **everything** automatically:
 10. **mod-eluna** - Lua scripting engine
 11. **mod-cfbg** - Cross-faction battlegrounds
 
-## 🎯 Installation Modes
+## 🚀 Quick Start
 
-### Option 1: Quick Setup (RECOMMENDED)
-```bash
-./install.sh
-# Select: 🚀 Quick Setup - Enable ALL Features
-```
+### Prerequisites
 
-**What it does:**
-- Auto-selects all modules
-- Configures optimal settings
-- Sets up 500-1000 bots
-- Enables all cross-faction features
-- Prompts for IP configuration
-- Shows complete summary before install
-
-### Option 2: Custom Installation
-```bash
-./install.sh
-# Select: ⚙️ Custom Installation - Select Features Manually
-```
-
-**Choose your own:**
-- Specific modules
-- Bot counts
-- Server type (PvE/PvP/RP)
-- Cross-faction options
-- Quality-of-life features
-
-### Option 3: Docker Installation
-```bash
-./install.sh
-# Select: 🐳 Docker Installation - Container Setup
-```
-
-Or use Docker directly:
-```bash
-cd docker
-docker-compose up -d
-docker-compose exec azerothcore install-azerothcore
-```
-
-## 🌐 Network Configuration
-
-### LAN Mode (Local Network)
-```
-Server IP: 192.168.1.100 (configurable)
-Access: Local network only
-Ports: 3724 (auth), 8085 (world)
-Client realmlist.wtf: set realmlist 192.168.1.100
-```
-
-### Internet Mode (Public Server)
-```
-Server IP: YOUR_EXTERNAL_IP or DDNS
-Access: Worldwide
-Requires: Port forwarding 3724 & 8085
-Client realmlist.wtf: set realmlist YOUR_EXTERNAL_IP
-```
-
-## 📋 Example Commands
+- Debian 13 (Trixie) Linux
+- Root or sudo access
+- Internet connection
+- Minimum 50GB free disk space
 
 ### Installation
+
 ```bash
-# Interactive installation with all features
-./install.sh
+# Download and navigate to the repository
+git clone <repository-url>
+cd VC-AzerothCore
 
-# Command-line options
-./install.sh --install-dir /opt/azerothcore
-./install.sh --realm-name "My Server"
-./install.sh --server-ip 192.168.1.50
-./install.sh --docker
-./install.sh --update
-./install.sh --help
+# Make the script executable
+chmod +x install-azerothcore.sh
+
+# Run the installer (must be root)
+sudo ./install-azerothcore.sh
 ```
 
-### Server Management (after install)
-```bash
-# Start servers
-start
+Then select **Option 1** for "🚀 FULL INSTALL - All Features & Modules"
 
-# Stop servers  
-stop
+### What Happens During Installation
 
-# Attach to world server console
-wow
+1. **System Preparation** - Updates packages, installs prerequisites
+2. **Repository Cloning** - Downloads AzerothCore and Playerbots
+3. **Dependency Installation** - Installs all required libraries
+4. **Module Installation** - Clones all selected modules
+5. **Build Configuration** - Configures compiler settings
+6. **Compilation** - Builds the server (15-45 minutes)
+7. **MySQL Configuration** - Sets up databases and user
+8. **Client Data Download** - Downloads game data files
+9. **Script Creation** - Creates management scripts
+10. **Database Hotfix** - Applies 2026-02-07 workaround
+11. **Flying Mount** - Creates custom flying mount item
+12. **Admin Account** - Creates your admin account
 
-# Attach to auth server console
-auth
+## 🎯 Installation Modes
 
-# Edit configurations
-pb          # Playerbots config
-world       # Worldserver config
-ah          # AH bot config (if installed)
-tm          # Transmog config (if installed)
+### Option 1: Full Install (Recommended)
 
-# Development
-build       # Incremental compile (fast)
-compile     # Full recompile (clean build)
-update      # Update core + playerbots
-updatemods  # Update all modules
-```
+Installs everything with optimal settings:
+- ✅ 500-1000 AI bots
+- ✅ All 10 modules
+- ✅ All cross-faction features
+- ✅ Instant logout, quest tracker
+- ✅ Flying mount item
+- ✅ PvP server type
 
-### Docker Commands
-```bash
-# Build and start
-cd docker
-docker-compose up -d
+### Option 2: Custom Install
 
-# View logs
-docker-compose logs -f
+Choose your own configuration:
+- Select specific modules
+- Configure bot counts
+- Choose server type (PvE/PvP/RP)
+- Enable/disable features
+- Set custom IP addresses
 
-# Execute installation in container
-docker-compose exec azerothcore install-azerothcore
+### Option 3: Wipe & Reinstall
 
-# Open shell
-docker-compose exec azerothcore /bin/bash
+Clean slate installation:
+- Backs up existing data (optional)
+- Removes old installation
+- Removes databases (optional)
+- Fresh install from scratch
 
-# Start servers in container
-docker-compose exec azerothcore /docker-entrypoint.sh start
+### Option 4: Install Modules Only
 
-# Stop
-docker-compose down
-```
+Add modules to existing installation
 
-## 🎮 Post-Installation Setup
+### Option 5: Update Existing
 
-### 1. Start Server
-```bash
-start
-```
+Update core and modules without full reinstall
 
-### 2. Create Admin Account
-```bash
-wow
-# In world server console:
-account create admin mypassword
-account set gmlevel admin 3 -1
-```
+### Option 6: Server Management
 
-### 3. Configure WoW Client
-Edit `Data/enUS/realmlist.wtf`:
-```
-set realmlist YOUR_SERVER_IP
-```
+Control your running server
 
-### 4. ARAC Module (Optional)
-Download `Patch-A.MPQ` from mod-arac repo and place in WoW client `Data` folder.
+### Option 7: Configuration
 
-## 🔧 Configuration Files
+Edit server settings and configurations
 
-After installation, edit these files to customize:
+## 📚 Documentation
 
-| File | Command | Purpose |
-|------|---------|---------|
-| `worldserver.conf` | `world` | Server type, rates, limits |
-| `playerbots.conf` | `pb` | Bot counts, behavior |
-| `mod_ahbot.conf` | `ah` | Auction house settings |
-| `transmog.conf` | `tm` | Transmog rules |
+### File Descriptions
 
-## 📊 System Requirements
+| File | Purpose | When to Read |
+|------|---------|--------------|
+| **INSTALL_GUIDE.md** | Complete installation guide with all details | Before/during installation |
+| **CHOICES.md** | Reference for all installation options | When customizing installation |
+| **SCRIPT_SUMMARY.md** | Quick reference of features and usage | Quick lookup |
+| **build.txt** | Original manual installation guide | Manual installation reference |
+| **docker/README.md** | Docker deployment guide | For containerized deployment |
 
-### Minimum
-- **CPU**: Quad-core
-- **RAM**: 4GB dedicated
+### Documentation Guide
+
+**New to AzerothCore?**
+1. Start with **README.md** (this file)
+2. Read **INSTALL_GUIDE.md** for complete details
+3. Run the installer and follow prompts
+
+**Want to customize?**
+1. Read **CHOICES.md** to understand all options
+2. Run installer with "Custom Install" option
+3. Select your preferred features
+
+**Need a quick reference?**
+1. Check **SCRIPT_SUMMARY.md** for command list
+2. Use management aliases after installation
+
+**Interested in Docker?**
+1. Read **docker/README.md**
+2. Use Docker deployment option
+
+## 💻 System Requirements
+
+### Minimum Requirements
+
+- **OS**: Debian 13 (Trixie) Linux
+- **CPU**: Quad-core processor
+- **RAM**: 4GB dedicated to server
 - **Disk**: 50GB free space
-- **OS**: Debian 12/Ubuntu 22.04 or Docker
+- **Network**: Internet connection for downloads
 
-### Recommended (for 1000 bots)
+### Recommended (for 1000+ bots)
+
 - **CPU**: 6+ cores
 - **RAM**: 8GB+ dedicated
 - **Disk**: 100GB SSD
 - **Network**: Stable connection
 
+### Client Requirements
+
+- **WoW Client**: Version 3.3.5a (WotLK)
+- **Download**: [ChromieCraft](https://www.chromiecraft.com/en/downloads/) (~17GB)
+- **Addons**: UnBot (bot control), TipTac (recommended)
+
+## ✨ Features
+
+### Server Features
+
+- **Multiple Server Types**: Normal, PvP, RP, RP-PvP
+- **Cross-Faction Support**: Groups, guilds, chat, auction house
+- **Quality of Life**: Instant logout, quest tracker, enhanced visibility
+- **Custom Items**: Flying mount (learnable at level 1)
+- **Database Hotfix**: Automatic 2026-02-07 workaround
+
+### Management Aliases
+
+After installation, use these shortcuts:
+
+```bash
+start      # Start auth & world servers
+stop       # Stop all servers
+wow        # Attach to world server console
+auth       # Attach to auth server console
+build      # Incremental compilation
+compile    # Full recompilation
+update     # Update core + playerbots
+updatemods # Update all modules
+pb         # Edit playerbots.conf
+world      # Edit worldserver.conf
+ah         # Edit AH bot config
+tm         # Edit transmog config
+```
+
+### Network Modes
+
+**LAN Mode:**
+- Local network access only
+- Use for single-player or LAN parties
+- Configure with local IP (e.g., 192.168.1.100)
+
+**Internet Mode:**
+- Public server access
+- Requires external IP or DDNS
+- Port forwarding required (ports 3724, 8085)
+
+## 🎮 Usage
+
+### Starting the Server
+
+```bash
+# Start both auth and world servers
+start
+
+# Check if running
+pgrep authserver
+pgrep worldserver
+```
+
+### Connecting to Console
+
+```bash
+# Connect to world server (use GM commands here)
+wow
+
+# Detach from console (press these keys)
+CTRL+B, D
+
+# Connect to auth server
+auth
+```
+
+### Creating Accounts
+
+```bash
+# Connect to world server
+wow
+
+# Create account
+account create username password
+
+# Make account GM (level 3 = full admin)
+account set gmlevel username 3 -1
+
+# Detach
+CTRL+B, D
+```
+
+### Configuring WoW Client
+
+Edit `Data/enUS/realmlist.wtf` in your WoW client:
+```
+set realmlist YOUR_SERVER_IP
+```
+
+### Module Setup
+
+**ARAC (All Races All Classes):**
+1. Download `Patch-A.MPQ` from mod-arac repository
+2. Place in WoW client `Data` folder
+
+**Auction House Bot:**
+1. Create account: `account create ahbot password`
+2. Login and create character
+3. Get GUID: `lookup player account ahbot`
+4. Edit config: `ah`
+5. Set `AuctionHouseBot.GUIDs = [your GUID]`
+
+**Transmogrification:**
+- In-game: `.npc add 190010`
+
+**Flying Mount:**
+- In-game: `.additem 701000`
+
 ## 🐛 Troubleshooting
 
-### Server won't start
+### Server Won't Start
+
 ```bash
-# Check status
-./install.sh --status
+# Check ports
+netstat -tlnp | grep -E '3724|8085'
+
+# Check MySQL
+systemctl status mariadb
 
 # View logs
 cd ~/azerothcore-wotlk/env/dist/bin
 ./worldserver
 ```
 
-### Reset all bots
-```bash
-pb
-# Set: AiPlayerbot.DeleteRandomBotAccounts = 1
-# Start server, wait, set back to 0
-```
+### Database Connection Errors
 
-### Clean rebuild
+1. Verify MySQL is running
+2. Check credentials in config files
+3. Verify databases exist: `mysql -u root -e "SHOW DATABASES;"`
+
+### Compilation Errors
+
 ```bash
+# Clean build directory
 rm -rf ~/azerothcore-wotlk/var/build
+
+# Recompile
 compile
 ```
 
-### Docker issues
-```bash
-# Reset everything
-docker-compose down -v
-docker-compose up -d
+### Reset All Bots
+
+1. Edit config: `pb`
+2. Set: `AiPlayerbot.DeleteRandomBotAccounts = 1`
+3. Start server, wait 5 minutes
+4. Set back to 0 and restart
+
+### Client Can't Connect
+
+1. Verify `realmlist.wtf` has correct IP
+2. Check firewall isn't blocking ports
+3. Verify router port forwarding (for internet)
+4. Check server is running: `pgrep worldserver`
+
+## 📖 GM Commands Reference
+
+### Account Management
+```
+account create <user> <pass>
+account set gmlevel <user> 3 -1
+account set password <user> <newpass> <newpass>
+account onlinelist
 ```
 
-## 📚 Documentation
+### Server Control
+```
+server shutdown <seconds>
+server restart <seconds>
+announce <message>
+notify <message>
+```
 
-- **CHOICES.md**: Complete feature reference
-- **docker/README.md**: Docker-specific guide
-- **build.txt**: Original manual installation guide
+### Items & Character
+```
+.add <itemid>
+.additem <itemid>
+.level <level>
+.tele <location>
+.fly on/off
+.god on/off
+```
+
+### Playerbots
+```
+.bot add <name>
+.bot remove <name>
+.bot init <name>
+```
 
 ## 🤝 Support
 
-- AzerothCore: https://www.azerothcore.org/
-- Playerbots: https://github.com/mod-playerbots/mod-playerbots
-- Modules: https://www.azerothcore.org/catalogue.html
+- **AzerothCore**: https://www.azerothcore.org/
+- **Playerbots**: https://github.com/mod-playerbots/mod-playerbots
+- **Modules**: https://www.azerothcore.org/catalogue.html
+- **Discord**: Join AzerothCore Discord for support
+
+## 🙏 Credits
+
+- **AzerothCore Team**: For the amazing open-source WoW emulator
+- **Playerbots Contributors**: For the AI companion system
+- **Module Developers**: For extending AzerothCore functionality
+- **WoW Community**: For keeping the game alive
 
 ## ⚖️ License
 
-This installation script is provided as-is for educational purposes. AzerothCore is AGPL licensed. World of Warcraft is a trademark of Blizzard Entertainment.
+This installation script is provided as-is for educational purposes.
+
+- **AzerothCore**: [AGPL License](https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE)
+- **Playerbots**: AGPL License
+- **World of Warcraft**: Trademark of [Blizzard Entertainment](https://www.blizzard.com/)
+
+This project is not affiliated with or endorsed by Blizzard Entertainment.
+
+## 📝 Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
+
+## 🗺️ Roadmap
+
+- [ ] Support for additional Linux distributions
+- [ ] Web-based configuration interface
+- [ ] Automated backup system
+- [ ] Monitoring dashboard
+- [ ] Additional module integrations
 
 ---
 
-**Quick Install Today:**
+**Ready to start your own WoW server?**
+
 ```bash
-cd /mnt/nfs/GIT/VC-AzerothCore
-./install.sh
-# Select option 1
+sudo ./install-azerothcore.sh
 ```
+
+🎮 **Happy gaming!**
+
+---
+
+<p align="center">
+  <sub>Built with ❤️ for the WoW community</sub>
+</p>
