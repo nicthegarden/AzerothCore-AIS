@@ -2,7 +2,7 @@
 
 # AzerothCore WoW Server - Complete Installation Script for Debian 13
 # Based on 2025-2026 AzerothCore + Playerbots Guide
-# Version: 2.0 - Enhanced with all features and workarounds
+# Version: 3.0 - Enhanced with 25+ modules
 
 set -e
 
@@ -41,7 +41,7 @@ INSTANT_LOGOUT=false
 QUEST_TRACKER=false
 ENABLE_FLYING_MOUNT=false
 
-# Module flags
+# Original 10 Module flags
 MOD_NO_HEARTHSTONE=false
 MOD_ACCOUNT_MOUNTS=false
 MOD_ARAC=false
@@ -52,6 +52,23 @@ MOD_SOLO_LFG=false
 MOD_AUTOBALANCE=false
 MOD_ELUNA=false
 MOD_CFBG=false
+
+# Additional 15 Module flags
+MOD_SKIP_DK=false
+MOD_LEARN_SPELLS=false
+MOD_NPC_BUFFER=false
+MOD_NPC_ENCHANTER=false
+MOD_WEEKEND_XP=false
+MOD_DUEL_RESET=false
+MOD_ANTICHEAT=false
+MOD_GUILDHOUSE=false
+MOD_WEAPON_VISUAL=false
+MOD_REWARD_PLAYED_TIME=false
+MOD_RESET_RAID_COOLDOWNS=false
+MOD_GATHERING_EXP=false
+MOD_CHANGEABLE_SPAWN_RATES=false
+MOD_CHALLENGE_MODES=false
+MOD_REWARD_SHOP=false
 
 # ============================================
 # UTILITY FUNCTIONS
@@ -118,10 +135,11 @@ ask_input() {
 show_main_menu() {
     print_header "AZEROTHCORE WOTLK SERVER - DEBIAN 13 INSTALLER"
     echo "A complete automated installation system for"
-    echo "AzerothCore with Playerbots and all modules"
+    echo "AzerothCore with Playerbots and 25+ modules"
     echo ""
     echo "Based on: 2025-2026 Complete Installation Guide"
     echo "Debian Version: 13 (Trixie)"
+    echo "Script Version: 3.0"
     echo ""
     
     echo "═══════════════════════════════════════════════════════════"
@@ -130,7 +148,7 @@ show_main_menu() {
     echo ""
     echo "  1) 🚀 FULL INSTALL - All Features & Modules"
     echo "     → Installs everything with optimal settings"
-    echo "     → 500-1000 bots, all modules, cross-faction"
+    echo "     → 500-1000 bots, 25+ modules, cross-faction"
     echo ""
     echo "  2) ⚙️  CUSTOM INSTALL - Choose Your Features"
     echo "     → Select specific modules and settings"
@@ -189,13 +207,16 @@ show_main_menu() {
 install_full() {
     print_header "🚀 FULL INSTALLATION - ALL FEATURES ENABLED"
     
-    print_status "This will install AzerothCore with ALL features:"
+    print_status "This will install AzerothCore with ALL 25+ modules:"
     echo ""
     echo "✓ AzerothCore + Playerbots (500-1000 bots)"
-    echo "✓ All 10 modules (ARAC, Transmog, AH Bot, etc.)"
+    echo "✓ All 25 modules (ARAC, Transmog, AH Bot, NPCs, etc.)"
     echo "✓ Cross-faction everything (groups, guilds, chat, AH)"
     echo "✓ Instant logout, quest tracker, enhanced visibility"
     echo "✓ Flying mount item (learnable at level 1)"
+    echo "✓ NPC Buffer & Enchanter"
+    echo "✓ Weekend XP boost"
+    echo "✓ Anticheat protection"
     echo "✓ PvP server type with all QoL features"
     echo ""
     
@@ -218,7 +239,7 @@ install_full() {
     QUEST_TRACKER=true
     ENABLE_FLYING_MOUNT=true
     
-    # Enable all modules
+    # Enable all original 10 modules
     MOD_NO_HEARTHSTONE=true
     MOD_ACCOUNT_MOUNTS=true
     MOD_ARAC=true
@@ -229,6 +250,23 @@ install_full() {
     MOD_AUTOBALANCE=true
     MOD_ELUNA=true
     MOD_CFBG=true
+    
+    # Enable all additional 15 modules
+    MOD_SKIP_DK=true
+    MOD_LEARN_SPELLS=true
+    MOD_NPC_BUFFER=true
+    MOD_NPC_ENCHANTER=true
+    MOD_WEEKEND_XP=true
+    MOD_DUEL_RESET=true
+    MOD_ANTICHEAT=true
+    MOD_GUILDHOUSE=true
+    MOD_WEAPON_VISUAL=true
+    MOD_REWARD_PLAYED_TIME=true
+    MOD_RESET_RAID_COOLDOWNS=true
+    MOD_GATHERING_EXP=true
+    MOD_CHANGEABLE_SPAWN_RATES=true
+    MOD_CHALLENGE_MODES=true
+    MOD_REWARD_SHOP=true
     
     # Collect user information
     collect_user_info
@@ -333,7 +371,9 @@ install_custom() {
     # Step 7: Module Selection
     print_status "Step 7/7: Module Selection"
     echo ""
-    echo "Select modules to install:"
+    echo "═══════════════════════════════════════════════════════════"
+    echo "  ESSENTIAL MODULES"
+    echo "═══════════════════════════════════════════════════════════"
     echo ""
     
     ask_yes_no "1. No Hearthstone Cooldown" && MOD_NO_HEARTHSTONE=true
@@ -346,6 +386,28 @@ install_custom() {
     ask_yes_no "8. Auto Balance" && MOD_AUTOBALANCE=true
     ask_yes_no "9. Eluna Lua Engine" && MOD_ELUNA=true
     ask_yes_no "10. Cross-Faction BGs" && MOD_CFBG=true
+    
+    echo ""
+    echo "═══════════════════════════════════════════════════════════"
+    echo "  QUALITY OF LIFE MODULES"
+    echo "═══════════════════════════════════════════════════════════"
+    echo ""
+    
+    ask_yes_no "11. Skip DK Starting Area" && MOD_SKIP_DK=true
+    ask_yes_no "12. Auto-Learn Spells" && MOD_LEARN_SPELLS=true
+    ask_yes_no "13. NPC Buffer (Free buffs)" && MOD_NPC_BUFFER=true
+    ask_yes_no "14. NPC Enchanter (Free enchants)" && MOD_NPC_ENCHANTER=true
+    ask_yes_no "15. Weekend XP Boost" && MOD_WEEKEND_XP=true
+    ask_yes_no "16. Duel Reset (Cooldowns)" && MOD_DUEL_RESET=true
+    ask_yes_no "17. Anticheat System" && MOD_ANTICHEAT=true
+    ask_yes_no "18. Guild House" && MOD_GUILDHOUSE=true
+    ask_yes_no "19. Weapon Visual Effects" && MOD_WEAPON_VISUAL=true
+    ask_yes_no "20. Reward Played Time" && MOD_REWARD_PLAYED_TIME=true
+    ask_yes_no "21. Reset Raid Cooldowns" && MOD_RESET_RAID_COOLDOWNS=true
+    ask_yes_no "22. Gathering Experience" && MOD_GATHERING_EXP=true
+    ask_yes_no "23. Changeable Spawn Rates" && MOD_CHANGEABLE_SPAWN_RATES=true
+    ask_yes_no "24. Challenge Modes (Hardcore)" && MOD_CHALLENGE_MODES=true
+    ask_yes_no "25. Reward Shop (Vote/Donation)" && MOD_REWARD_SHOP=true
     
     # Show summary
     show_installation_summary
@@ -536,7 +598,7 @@ show_installation_summary() {
     echo "  Flying Mount: $ENABLE_FLYING_MOUNT"
     echo ""
     
-    echo -e "${CYAN}Modules to Install:${NC}"
+    echo -e "${CYAN}Essential Modules:${NC}"
     [ "$MOD_NO_HEARTHSTONE" = true ] && echo "  ✓ No Hearthstone Cooldown"
     [ "$MOD_ACCOUNT_MOUNTS" = true ] && echo "  ✓ Account-Wide Mounts"
     [ "$MOD_ARAC" = true ] && echo "  ✓ All Races All Classes (ARAC)"
@@ -548,6 +610,44 @@ show_installation_summary() {
     [ "$MOD_ELUNA" = true ] && echo "  ✓ Eluna Lua Engine"
     [ "$MOD_CFBG" = true ] && echo "  ✓ Cross-Faction BGs"
     echo ""
+    
+    # Count additional modules
+    local additional_count=0
+    [ "$MOD_SKIP_DK" = true ] && ((additional_count++))
+    [ "$MOD_LEARN_SPELLS" = true ] && ((additional_count++))
+    [ "$MOD_NPC_BUFFER" = true ] && ((additional_count++))
+    [ "$MOD_NPC_ENCHANTER" = true ] && ((additional_count++))
+    [ "$MOD_WEEKEND_XP" = true ] && ((additional_count++))
+    [ "$MOD_DUEL_RESET" = true ] && ((additional_count++))
+    [ "$MOD_ANTICHEAT" = true ] && ((additional_count++))
+    [ "$MOD_GUILDHOUSE" = true ] && ((additional_count++))
+    [ "$MOD_WEAPON_VISUAL" = true ] && ((additional_count++))
+    [ "$MOD_REWARD_PLAYED_TIME" = true ] && ((additional_count++))
+    [ "$MOD_RESET_RAID_COOLDOWNS" = true ] && ((additional_count++))
+    [ "$MOD_GATHERING_EXP" = true ] && ((additional_count++))
+    [ "$MOD_CHANGEABLE_SPAWN_RATES" = true ] && ((additional_count++))
+    [ "$MOD_CHALLENGE_MODES" = true ] && ((additional_count++))
+    [ "$MOD_REWARD_SHOP" = true ] && ((additional_count++))
+    
+    if [ $additional_count -gt 0 ]; then
+        echo -e "${CYAN}Additional QoL Modules ($additional_count):${NC}"
+        [ "$MOD_SKIP_DK" = true ] && echo "  ✓ Skip DK Starting Area"
+        [ "$MOD_LEARN_SPELLS" = true ] && echo "  ✓ Auto-Learn Spells"
+        [ "$MOD_NPC_BUFFER" = true ] && echo "  ✓ NPC Buffer"
+        [ "$MOD_NPC_ENCHANTER" = true ] && echo "  ✓ NPC Enchanter"
+        [ "$MOD_WEEKEND_XP" = true ] && echo "  ✓ Weekend XP"
+        [ "$MOD_DUEL_RESET" = true ] && echo "  ✓ Duel Reset"
+        [ "$MOD_ANTICHEAT" = true ] && echo "  ✓ Anticheat"
+        [ "$MOD_GUILDHOUSE" = true ] && echo "  ✓ Guild House"
+        [ "$MOD_WEAPON_VISUAL" = true ] && echo "  ✓ Weapon Visual"
+        [ "$MOD_REWARD_PLAYED_TIME" = true ] && echo "  ✓ Reward Played Time"
+        [ "$MOD_RESET_RAID_COOLDOWNS" = true ] && echo "  ✓ Reset Raid Cooldowns"
+        [ "$MOD_GATHERING_EXP" = true ] && echo "  ✓ Gathering Experience"
+        [ "$MOD_CHANGEABLE_SPAWN_RATES" = true ] && echo "  ✓ Changeable Spawn Rates"
+        [ "$MOD_CHALLENGE_MODES" = true ] && echo "  ✓ Challenge Modes"
+        [ "$MOD_REWARD_SHOP" = true ] && echo "  ✓ Reward Shop"
+        echo ""
+    fi
     
     echo -e "${CYAN}Estimated Time:${NC} 20-50 minutes"
     echo -e "${CYAN}Disk Space Required:${NC} ~50GB"
@@ -679,17 +779,20 @@ step_install_modules() {
     print_header "STEP 4/13: INSTALLING MODULES"
     
     cd "$INSTALL_DIR/modules"
+    local module_count=0
     
     # Module 1: No Hearthstone Cooldown
     if [ "$MOD_NO_HEARTHSTONE" = true ]; then
         print_status "Installing mod-no-hearthstone-cooldown..."
         git clone https://github.com/BytesGalore/mod-no-hearthstone-cooldown.git 2>/dev/null || true
+        ((module_count++))
     fi
     
     # Module 2: Account Mounts
     if [ "$MOD_ACCOUNT_MOUNTS" = true ]; then
         print_status "Installing mod-account-mounts..."
         git clone https://github.com/azerothcore/mod-account-mounts 2>/dev/null || true
+        ((module_count++))
     fi
     
     # Module 3: ARAC
@@ -697,12 +800,14 @@ step_install_modules() {
         print_status "Installing mod-arac..."
         git clone https://github.com/heyitsbench/mod-arac.git 2>/dev/null || true
         print_warning "ARAC requires Patch-A.MPQ in your WoW client Data folder"
+        ((module_count++))
     fi
     
     # Module 4: AH Bot Plus
     if [ "$MOD_AH_BOT" = true ]; then
         print_status "Installing mod-ah-bot-plus..."
         git clone https://github.com/NathanHandley/mod-ah-bot-plus 2>/dev/null || true
+        ((module_count++))
     fi
     
     # Module 5: Transmog
@@ -716,39 +821,150 @@ step_install_modules() {
            "$INSTALL_DIR/data/sql/updates/db_characters/" 2>/dev/null || true
         cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-world/"*.sql \
            "$INSTALL_DIR/data/sql/updates/db_world/" 2>/dev/null || true
+        ((module_count++))
     fi
     
     # Module 6: AoE Loot
     if [ "$MOD_AOE_LOOT" = true ]; then
         print_status "Installing mod-aoe-loot..."
         git clone https://github.com/azerothcore/mod-aoe-loot 2>/dev/null || true
+        ((module_count++))
     fi
     
     # Module 7: Solo LFG
     if [ "$MOD_SOLO_LFG" = true ]; then
         print_status "Installing mod-solo-lfg..."
         git clone https://github.com/azerothcore/mod-solo-lfg 2>/dev/null || true
+        ((module_count++))
     fi
     
     # Module 8: Auto Balance
     if [ "$MOD_AUTOBALANCE" = true ]; then
         print_status "Installing mod-autobalance..."
         git clone https://github.com/azerothcore/mod-autobalance 2>/dev/null || true
+        ((module_count++))
     fi
     
     # Module 9: Eluna
     if [ "$MOD_ELUNA" = true ]; then
         print_status "Installing mod-eluna..."
         git clone https://github.com/azerothcore/mod-eluna 2>/dev/null || true
+        ((module_count++))
     fi
     
     # Module 10: CFBG
     if [ "$MOD_CFBG" = true ]; then
         print_status "Installing mod-cfbg..."
         git clone https://github.com/azerothcore/mod-cfbg 2>/dev/null || true
+        ((module_count++))
     fi
     
-    print_success "Modules installed"
+    # Module 11: Skip DK Starting Area
+    if [ "$MOD_SKIP_DK" = true ]; then
+        print_status "Installing mod-skip-dk-starting-area..."
+        git clone https://github.com/azerothcore/mod-skip-dk-starting-area.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 12: Learn Spells
+    if [ "$MOD_LEARN_SPELLS" = true ]; then
+        print_status "Installing mod-learn-spells..."
+        git clone https://github.com/azerothcore/mod-learn-spells.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 13: NPC Buffer
+    if [ "$MOD_NPC_BUFFER" = true ]; then
+        print_status "Installing mod-npc-buffer..."
+        git clone https://github.com/azerothcore/mod-npc-buffer.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 14: NPC Enchanter
+    if [ "$MOD_NPC_ENCHANTER" = true ]; then
+        print_status "Installing mod-npc-enchanter..."
+        git clone https://github.com/azerothcore/mod-npc-enchanter.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 15: Weekend XP
+    if [ "$MOD_WEEKEND_XP" = true ]; then
+        print_status "Installing mod-weekend-xp..."
+        git clone https://github.com/azerothcore/mod-weekend-xp.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 16: Duel Reset
+    if [ "$MOD_DUEL_RESET" = true ]; then
+        print_status "Installing mod-duel-reset..."
+        git clone https://github.com/azerothcore/mod-duel-reset.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 17: Anticheat
+    if [ "$MOD_ANTICHEAT" = true ]; then
+        print_status "Installing mod-anticheat..."
+        git clone https://github.com/azerothcore/mod-anticheat.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 18: Guildhouse
+    if [ "$MOD_GUILDHOUSE" = true ]; then
+        print_status "Installing mod-guildhouse..."
+        git clone https://github.com/azerothcore/mod-guildhouse.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 19: Weapon Visual
+    if [ "$MOD_WEAPON_VISUAL" = true ]; then
+        print_status "Installing mod-weapon-visual..."
+        git clone https://github.com/azerothcore/mod-weapon-visual.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 20: Reward Played Time
+    if [ "$MOD_REWARD_PLAYED_TIME" = true ]; then
+        print_status "Installing mod-reward-played-time..."
+        git clone https://github.com/azerothcore/mod-reward-played-time.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 21: Reset Raid Cooldowns
+    if [ "$MOD_RESET_RAID_COOLDOWNS" = true ]; then
+        print_status "Installing mod-reset-raid-cooldowns..."
+        git clone https://github.com/sogladev/mod-reset-raid-cooldowns.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 22: Gathering Experience
+    if [ "$MOD_GATHERING_EXP" = true ]; then
+        print_status "Installing mod-gathering-experience..."
+        git clone https://github.com/xSparky911x/mod-gathering-experience.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 23: Changeable Spawn Rates
+    if [ "$MOD_CHANGEABLE_SPAWN_RATES" = true ]; then
+        print_status "Installing mod-changeablespawnrates..."
+        git clone https://github.com/justin-kaufmann/mod-changeablespawnrates.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 24: Challenge Modes
+    if [ "$MOD_CHALLENGE_MODES" = true ]; then
+        print_status "Installing mod-challenge-modes..."
+        git clone https://github.com/ZhengPeiRu21/mod-challenge-modes.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    # Module 25: Reward Shop
+    if [ "$MOD_REWARD_SHOP" = true ]; then
+        print_status "Installing mod-reward-shop..."
+        git clone https://github.com/azerothcore/mod-reward-shop.git 2>/dev/null || true
+        ((module_count++))
+    fi
+    
+    print_success "$module_count modules installed"
 }
 
 step_configure_build() {
@@ -1171,6 +1387,27 @@ show_post_install_info() {
         echo ""
     fi
     
+    if [ "$MOD_NPC_BUFFER" = true ] || [ "$MOD_NPC_ENCHANTER" = true ]; then
+        echo -e "${CYAN}🧙 NPC MODULES:${NC}"
+        [ "$MOD_NPC_BUFFER" = true ] && echo "  Buffer NPC: .npc add 601016"
+        [ "$MOD_NPC_ENCHANTER" = true ] && echo "  Enchanter NPC: .npc add 601015"
+        echo ""
+    fi
+    
+    if [ "$MOD_GUILDHOUSE" = true ]; then
+        echo -e "${CYAN}🏰 GUILD HOUSE:${NC}"
+        echo "  Purchase guild house with: .guildhouse purchase"
+        echo "  Teleport with: .guildhouse tele"
+        echo ""
+    fi
+    
+    if [ "$MOD_CHALLENGE_MODES" = true ]; then
+        echo -e "${CYAN}⚔️  CHALLENGE MODES:${NC}"
+        echo "  Enable hardcore: .challenge hardcore"
+        echo "  Check status: .challenge"
+        echo ""
+    fi
+    
     if [ -n "$EXTERNAL_IP" ]; then
         echo -e "${CYAN}🌐 INTERNET ACCESS:${NC}"
         echo "  External IP: $EXTERNAL_IP"
@@ -1179,7 +1416,7 @@ show_post_install_info() {
     fi
     
     echo "═══════════════════════════════════════════════════════════"
-    echo "  📖 Documentation: $SCRIPT_DIR/CHOICES.md"
+    echo "  📖 Documentation: $SCRIPT_DIR/ADDITIONAL_MODULES.md"
     echo "═══════════════════════════════════════════════════════════"
     echo ""
     
@@ -1203,6 +1440,10 @@ install_modules_only() {
     fi
     
     print_status "Available modules:"
+    echo ""
+    echo "═══════════════════════════════════════════════════════════"
+    echo "  ESSENTIAL MODULES (1-10)"
+    echo "═══════════════════════════════════════════════════════════"
     echo "1) No Hearthstone Cooldown"
     echo "2) Account-Wide Mounts"
     echo "3) All Races All Classes (ARAC)"
@@ -1213,30 +1454,59 @@ install_modules_only() {
     echo "8) Auto Balance"
     echo "9) Eluna Lua Engine"
     echo "10) Cross-Faction BGs"
-    echo "11) Install ALL modules"
+    echo ""
+    echo "═══════════════════════════════════════════════════════════"
+    echo "  QUALITY OF LIFE MODULES (11-25)"
+    echo "═══════════════════════════════════════════════════════════"
+    echo "11) Skip DK Starting Area"
+    echo "12) Auto-Learn Spells"
+    echo "13) NPC Buffer (Free buffs)"
+    echo "14) NPC Enchanter (Free enchants)"
+    echo "15) Weekend XP Boost"
+    echo "16) Duel Reset (Cooldowns)"
+    echo "17) Anticheat System"
+    echo "18) Guild House"
+    echo "19) Weapon Visual Effects"
+    echo "20) Reward Played Time"
+    echo "21) Reset Raid Cooldowns"
+    echo "22) Gathering Experience"
+    echo "23) Changeable Spawn Rates"
+    echo "24) Challenge Modes (Hardcore)"
+    echo "25) Reward Shop (Vote/Donation)"
+    echo ""
+    echo "═══════════════════════════════════════════════════════════"
+    echo "  BULK OPTIONS"
+    echo "═══════════════════════════════════════════════════════════"
+    echo "26) Install ALL essential modules (1-10)"
+    echo "27) Install ALL modules (1-25)"
     echo ""
     
     read -p "Enter module numbers (space-separated): " choices
     
     cd "$INSTALL_DIR/modules"
+    local installed_count=0
     
     for choice in $choices; do
         case $choice in
             1) 
                 git clone https://github.com/BytesGalore/mod-no-hearthstone-cooldown.git 2>/dev/null || true
                 print_success "No Hearthstone Cooldown installed"
+                ((installed_count++))
                 ;;
             2)
                 git clone https://github.com/azerothcore/mod-account-mounts 2>/dev/null || true
                 print_success "Account Mounts installed"
+                ((installed_count++))
                 ;;
             3)
                 git clone https://github.com/heyitsbench/mod-arac.git 2>/dev/null || true
                 print_success "ARAC installed (remember Patch-A.MPQ!)"
+                ((installed_count++))
                 ;;
             4)
                 git clone https://github.com/NathanHandley/mod-ah-bot-plus 2>/dev/null || true
                 print_success "AH Bot installed"
+                ((installed_count++))
                 ;;
             5)
                 git clone https://github.com/azerothcore/mod-transmog.git 2>/dev/null || true
@@ -1247,48 +1517,175 @@ install_modules_only() {
                 cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-world/"*.sql \
                    "$INSTALL_DIR/data/sql/updates/db_world/" 2>/dev/null || true
                 print_success "Transmog installed"
+                ((installed_count++))
                 ;;
             6)
                 git clone https://github.com/azerothcore/mod-aoe-loot 2>/dev/null || true
                 print_success "AoE Loot installed"
+                ((installed_count++))
                 ;;
             7)
                 git clone https://github.com/azerothcore/mod-solo-lfg 2>/dev/null || true
                 print_success "Solo LFG installed"
+                ((installed_count++))
                 ;;
             8)
                 git clone https://github.com/azerothcore/mod-autobalance 2>/dev/null || true
                 print_success "Auto Balance installed"
+                ((installed_count++))
                 ;;
             9)
                 git clone https://github.com/azerothcore/mod-eluna 2>/dev/null || true
                 print_success "Eluna installed"
+                ((installed_count++))
                 ;;
             10)
                 git clone https://github.com/azerothcore/mod-cfbg 2>/dev/null || true
                 print_success "CFBG installed"
+                ((installed_count++))
                 ;;
             11)
-                git clone https://github.com/BytesGalore/mod-no-hearthstone-cooldown.git 2>/dev/null || true
-                git clone https://github.com/azerothcore/mod-account-mounts 2>/dev/null || true
-                git clone https://github.com/heyitsbench/mod-arac.git 2>/dev/null || true
-                git clone https://github.com/NathanHandley/mod-ah-bot-plus 2>/dev/null || true
-                git clone https://github.com/azerothcore/mod-transmog.git 2>/dev/null || true
-                cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-auth/acore_cms_subscriptions.sql" \
-                   "$INSTALL_DIR/data/sql/updates/db_auth/" 2>/dev/null || true
-                cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-characters/trasmorg.sql" \
-                   "$INSTALL_DIR/data/sql/updates/db_characters/" 2>/dev/null || true
-                cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-world/"*.sql \
-                   "$INSTALL_DIR/data/sql/updates/db_world/" 2>/dev/null || true
-                git clone https://github.com/azerothcore/mod-aoe-loot 2>/dev/null || true
-                git clone https://github.com/azerothcore/mod-solo-lfg 2>/dev/null || true
-                git clone https://github.com/azerothcore/mod-autobalance 2>/dev/null || true
-                git clone https://github.com/azerothcore/mod-eluna 2>/dev/null || true
-                git clone https://github.com/azerothcore/mod-cfbg 2>/dev/null || true
-                print_success "All modules installed"
+                git clone https://github.com/azerothcore/mod-skip-dk-starting-area.git 2>/dev/null || true
+                print_success "Skip DK Starting Area installed"
+                ((installed_count++))
+                ;;
+            12)
+                git clone https://github.com/azerothcore/mod-learn-spells.git 2>/dev/null || true
+                print_success "Learn Spells installed"
+                ((installed_count++))
+                ;;
+            13)
+                git clone https://github.com/azerothcore/mod-npc-buffer.git 2>/dev/null || true
+                print_success "NPC Buffer installed"
+                ((installed_count++))
+                ;;
+            14)
+                git clone https://github.com/azerothcore/mod-npc-enchanter.git 2>/dev/null || true
+                print_success "NPC Enchanter installed"
+                ((installed_count++))
+                ;;
+            15)
+                git clone https://github.com/azerothcore/mod-weekend-xp.git 2>/dev/null || true
+                print_success "Weekend XP installed"
+                ((installed_count++))
+                ;;
+            16)
+                git clone https://github.com/azerothcore/mod-duel-reset.git 2>/dev/null || true
+                print_success "Duel Reset installed"
+                ((installed_count++))
+                ;;
+            17)
+                git clone https://github.com/azerothcore/mod-anticheat.git 2>/dev/null || true
+                print_success "Anticheat installed"
+                ((installed_count++))
+                ;;
+            18)
+                git clone https://github.com/azerothcore/mod-guildhouse.git 2>/dev/null || true
+                print_success "Guildhouse installed"
+                ((installed_count++))
+                ;;
+            19)
+                git clone https://github.com/azerothcore/mod-weapon-visual.git 2>/dev/null || true
+                print_success "Weapon Visual installed"
+                ((installed_count++))
+                ;;
+            20)
+                git clone https://github.com/azerothcore/mod-reward-played-time.git 2>/dev/null || true
+                print_success "Reward Played Time installed"
+                ((installed_count++))
+                ;;
+            21)
+                git clone https://github.com/sogladev/mod-reset-raid-cooldowns.git 2>/dev/null || true
+                print_success "Reset Raid Cooldowns installed"
+                ((installed_count++))
+                ;;
+            22)
+                git clone https://github.com/xSparky911x/mod-gathering-experience.git 2>/dev/null || true
+                print_success "Gathering Experience installed"
+                ((installed_count++))
+                ;;
+            23)
+                git clone https://github.com/justin-kaufmann/mod-changeablespawnrates.git 2>/dev/null || true
+                print_success "Changeable Spawn Rates installed"
+                ((installed_count++))
+                ;;
+            24)
+                git clone https://github.com/ZhengPeiRu21/mod-challenge-modes.git 2>/dev/null || true
+                print_success "Challenge Modes installed"
+                ((installed_count++))
+                ;;
+            25)
+                git clone https://github.com/azerothcore/mod-reward-shop.git 2>/dev/null || true
+                print_success "Reward Shop installed"
+                ((installed_count++))
+                ;;
+            26)
+                # Install all essential modules (1-10)
+                for i in 1 2 3 4 5 6 7 8 9 10; do
+                    case $i in
+                        1) git clone https://github.com/BytesGalore/mod-no-hearthstone-cooldown.git 2>/dev/null || true ;;
+                        2) git clone https://github.com/azerothcore/mod-account-mounts 2>/dev/null || true ;;
+                        3) git clone https://github.com/heyitsbench/mod-arac.git 2>/dev/null || true ;;
+                        4) git clone https://github.com/NathanHandley/mod-ah-bot-plus 2>/dev/null || true ;;
+                        5) 
+                            git clone https://github.com/azerothcore/mod-transmog.git 2>/dev/null || true
+                            cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-auth/acore_cms_subscriptions.sql" "$INSTALL_DIR/data/sql/updates/db_auth/" 2>/dev/null || true
+                            cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-characters/trasmorg.sql" "$INSTALL_DIR/data/sql/updates/db_characters/" 2>/dev/null || true
+                            cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-world/"*.sql "$INSTALL_DIR/data/sql/updates/db_world/" 2>/dev/null || true
+                            ;;
+                        6) git clone https://github.com/azerothcore/mod-aoe-loot 2>/dev/null || true ;;
+                        7) git clone https://github.com/azerothcore/mod-solo-lfg 2>/dev/null || true ;;
+                        8) git clone https://github.com/azerothcore/mod-autobalance 2>/dev/null || true ;;
+                        9) git clone https://github.com/azerothcore/mod-eluna 2>/dev/null || true ;;
+                        10) git clone https://github.com/azerothcore/mod-cfbg 2>/dev/null || true ;;
+                    esac
+                done
+                print_success "All essential modules (1-10) installed"
+                installed_count=10
+                ;;
+            27)
+                # Install all modules (1-25)
+                for i in $(seq 1 25); do
+                    case $i in
+                        1) git clone https://github.com/BytesGalore/mod-no-hearthstone-cooldown.git 2>/dev/null || true ;;
+                        2) git clone https://github.com/azerothcore/mod-account-mounts 2>/dev/null || true ;;
+                        3) git clone https://github.com/heyitsbench/mod-arac.git 2>/dev/null || true ;;
+                        4) git clone https://github.com/NathanHandley/mod-ah-bot-plus 2>/dev/null || true ;;
+                        5) 
+                            git clone https://github.com/azerothcore/mod-transmog.git 2>/dev/null || true
+                            cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-auth/acore_cms_subscriptions.sql" "$INSTALL_DIR/data/sql/updates/db_auth/" 2>/dev/null || true
+                            cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-characters/trasmorg.sql" "$INSTALL_DIR/data/sql/updates/db_characters/" 2>/dev/null || true
+                            cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-world/"*.sql "$INSTALL_DIR/data/sql/updates/db_world/" 2>/dev/null || true
+                            ;;
+                        6) git clone https://github.com/azerothcore/mod-aoe-loot 2>/dev/null || true ;;
+                        7) git clone https://github.com/azerothcore/mod-solo-lfg 2>/dev/null || true ;;
+                        8) git clone https://github.com/azerothcore/mod-autobalance 2>/dev/null || true ;;
+                        9) git clone https://github.com/azerothcore/mod-eluna 2>/dev/null || true ;;
+                        10) git clone https://github.com/azerothcore/mod-cfbg 2>/dev/null || true ;;
+                        11) git clone https://github.com/azerothcore/mod-skip-dk-starting-area.git 2>/dev/null || true ;;
+                        12) git clone https://github.com/azerothcore/mod-learn-spells.git 2>/dev/null || true ;;
+                        13) git clone https://github.com/azerothcore/mod-npc-buffer.git 2>/dev/null || true ;;
+                        14) git clone https://github.com/azerothcore/mod-npc-enchanter.git 2>/dev/null || true ;;
+                        15) git clone https://github.com/azerothcore/mod-weekend-xp.git 2>/dev/null || true ;;
+                        16) git clone https://github.com/azerothcore/mod-duel-reset.git 2>/dev/null || true ;;
+                        17) git clone https://github.com/azerothcore/mod-anticheat.git 2>/dev/null || true ;;
+                        18) git clone https://github.com/azerothcore/mod-guildhouse.git 2>/dev/null || true ;;
+                        19) git clone https://github.com/azerothcore/mod-weapon-visual.git 2>/dev/null || true ;;
+                        20) git clone https://github.com/azerothcore/mod-reward-played-time.git 2>/dev/null || true ;;
+                        21) git clone https://github.com/sogladev/mod-reset-raid-cooldowns.git 2>/dev/null || true ;;
+                        22) git clone https://github.com/xSparky911x/mod-gathering-experience.git 2>/dev/null || true ;;
+                        23) git clone https://github.com/justin-kaufmann/mod-changeablespawnrates.git 2>/dev/null || true ;;
+                        24) git clone https://github.com/ZhengPeiRu21/mod-challenge-modes.git 2>/dev/null || true ;;
+                        25) git clone https://github.com/azerothcore/mod-reward-shop.git 2>/dev/null || true ;;
+                    esac
+                done
+                print_success "All 25 modules installed"
+                installed_count=25
                 ;;
         esac
     done
+    
+    print_success "$installed_count module(s) installed successfully"
     
     if ask_yes_no "Recompile now"; then
         cd "$INSTALL_DIR"
@@ -1484,33 +1881,41 @@ configuration() {
 show_documentation() {
     print_header "📖 DOCUMENTATION"
     
-    echo "1) View Installation Guide (CHOICES.md)"
-    echo "2) View Module Information"
-    echo "3) View GM Commands"
-    echo "4) View Troubleshooting"
-    echo "5) Back to Main Menu"
+    echo "1) View Installation Guide (INSTALL_GUIDE.md)"
+    echo "2) View Additional Modules (ADDITIONAL_MODULES.md)"
+    echo "3) View Module Information"
+    echo "4) View GM Commands"
+    echo "5) View Troubleshooting"
+    echo "6) Back to Main Menu"
     echo ""
     
     local choice=$(ask_input "Select option" "1")
     
     case $choice in
         1)
-            if [ -f "$SCRIPT_DIR/CHOICES.md" ]; then
-                less "$SCRIPT_DIR/CHOICES.md"
+            if [ -f "$SCRIPT_DIR/INSTALL_GUIDE.md" ]; then
+                less "$SCRIPT_DIR/INSTALL_GUIDE.md"
             else
                 print_error "Documentation not found"
             fi
             ;;
         2)
-            show_module_info
+            if [ -f "$SCRIPT_DIR/ADDITIONAL_MODULES.md" ]; then
+                less "$SCRIPT_DIR/ADDITIONAL_MODULES.md"
+            else
+                print_error "Documentation not found"
+            fi
             ;;
         3)
-            show_gm_commands
+            show_module_info
             ;;
         4)
-            show_troubleshooting
+            show_gm_commands
             ;;
         5)
+            show_troubleshooting
+            ;;
+        6)
             show_main_menu
             return
             ;;
@@ -1523,38 +1928,37 @@ show_module_info() {
     print_header "MODULE INFORMATION"
     
     echo "═══════════════════════════════════════════════════════════"
-    echo "1. mod-no-hearthstone-cooldown"
-    echo "   Removes 30-minute hearthstone cooldown"
+    echo "ESSENTIAL MODULES"
+    echo "═══════════════════════════════════════════════════════════"
+    echo "1. mod-no-hearthstone-cooldown - Remove hearthstone cooldown"
+    echo "2. mod-account-mounts - Account-wide mounts"
+    echo "3. mod-arac - All Races All Classes (Human Druids, etc.)"
+    echo "4. mod-ah-bot-plus - Auction House Bot"
+    echo "5. mod-transmog - Transmogrification system"
+    echo "6. mod-aoe-loot - Area of Effect looting"
+    echo "7. mod-solo-lfg - Solo dungeon finder"
+    echo "8. mod-autobalance - Auto dungeon scaling"
+    echo "9. mod-eluna - Lua scripting engine"
+    echo "10. mod-cfbg - Cross-faction battlegrounds"
     echo ""
-    echo "2. mod-account-mounts"
-    echo "   Makes mounts account-wide instead of character-specific"
-    echo ""
-    echo "3. mod-arac (All Races All Classes)"
-    echo "   Allows any race to be any class"
-    echo "   Requires Patch-A.MPQ in WoW client"
-    echo ""
-    echo "4. mod-ah-bot-plus"
-    echo "   Auction House Bot - posts items for sale"
-    echo "   Requires GUID configuration"
-    echo ""
-    echo "5. mod-transmog"
-    echo "   Transmogrification system for cosmetic appearances"
-    echo "   GM Command: .npc add 190010"
-    echo ""
-    echo "6. mod-aoe-loot"
-    echo "   Loot all nearby mobs at once"
-    echo ""
-    echo "7. mod-solo-lfg"
-    echo "   Solo queue for Looking For Group dungeons"
-    echo ""
-    echo "8. mod-autobalance"
-    echo "   Auto-balances dungeon difficulty based on player count"
-    echo ""
-    echo "9. mod-eluna"
-    echo "   Lua scripting engine for custom scripts"
-    echo ""
-    echo "10. mod-cfbg"
-    echo "   Cross-faction battlegrounds"
+    echo "═══════════════════════════════════════════════════════════"
+    echo "QUALITY OF LIFE MODULES"
+    echo "═══════════════════════════════════════════════════════════"
+    echo "11. mod-skip-dk-starting-area - Skip DK tutorial zone"
+    echo "12. mod-learn-spells - Auto-learn spells on levelup"
+    echo "13. mod-npc-buffer - Free buff NPC (.npc add 601016)"
+    echo "14. mod-npc-enchanter - Free enchant NPC (.npc add 601015)"
+    echo "15. mod-weekend-xp - Double XP on weekends"
+    echo "16. mod-duel-reset - Reset cooldowns after duels"
+    echo "17. mod-anticheat - Anti-hack detection"
+    echo "18. mod-guildhouse - Custom guild houses"
+    echo "19. mod-weapon-visual - Cosmetic weapon effects"
+    echo "20. mod-reward-played-time - Rewards for time played"
+    echo "21. mod-reset-raid-cooldowns - No Heroism debuff wait"
+    echo "22. mod-gathering-experience - XP for mining/herbalism"
+    echo "23. mod-changeablespawnrates - Dynamic mob spawns"
+    echo "24. mod-challenge-modes - Hardcore/Ironman modes"
+    echo "25. mod-reward-shop - Vote/donation shop"
     echo "═══════════════════════════════════════════════════════════"
     echo ""
     read -p "Press Enter to continue..."
@@ -1568,51 +1972,41 @@ show_gm_commands() {
     echo "───────────────────"
     echo "account create <user> <pass>    - Create new account"
     echo "account set gmlevel <user> 3 -1 - Make user GM (level 3)"
-    echo "account set password <user> <pass> <pass> - Change password"
+    echo "account set password <user> <newpass> <newpass> - Change password"
     echo "account onlinelist              - List online accounts"
     echo ""
-    echo "SERVER MANAGEMENT"
+    echo "SERVER CONTROL"
     echo "───────────────────"
     echo "server shutdown <seconds>       - Shutdown server"
     echo "server restart <seconds>        - Restart server"
     echo "announce <message>              - Send global announcement"
     echo "notify <message>                - Send notification"
     echo ""
-    echo "ITEM COMMANDS"
+    echo "ITEMS & CHARACTER"
     echo "───────────────────"
     echo ".add <itemid>                   - Add item to target"
-    echo ".additem <itemid>               - Add item to yourself"
-    echo ".additemset <setid>             - Add item set"
-    echo ".addmoney <amount>              - Add gold"
-    echo ""
-    echo "CHARACTER COMMANDS"
-    echo "───────────────────"
+    echo ".additem 701000                 - Add flying mount tome"
     echo ".level <level>                  - Set level"
     echo ".tele <location>                - Teleport to location"
-    echo ".speed <speed>                  - Set speed (1-10)"
     echo ".fly on/off                     - Enable/disable flying"
     echo ".god on/off                     - God mode"
     echo ""
-    echo "NPC COMMANDS"
+    echo "NPC MODULES"
     echo "───────────────────"
-    echo ".npc add <id>                   - Spawn NPC"
-    echo ".npc del                        - Delete targeted NPC"
-    echo ".npc set level <level>          - Set NPC level"
+    echo ".npc add 601016                 - Buffer NPC"
+    echo ".npc add 601015                 - Enchanter NPC"
+    echo ".npc add 190010                 - Transmog NPC"
     echo ""
-    echo "PLAYERBOT COMMANDS"
+    echo "GUILD HOUSE"
     echo "───────────────────"
-    echo ".bot add <name>                 - Add bot to group"
-    echo ".bot remove <name>              - Remove bot"
-    echo ".bot init <name>                - Initialize bot gear"
-    echo ".bot spec <spec>                - Set bot specialization"
+    echo ".guildhouse purchase            - Buy guild house"
+    echo ".guildhouse tele                - Teleport to guild house"
     echo ""
-    echo "DATABASE COMMANDS"
+    echo "CHALLENGE MODES"
     echo "───────────────────"
-    echo "pdump write <file> <char>       - Backup character"
-    echo "pdump load <file> <account>     - Restore character"
+    echo ".challenge hardcore             - Enable hardcore mode"
+    echo ".challenge                      - Check challenge status"
     echo "═══════════════════════════════════════════════════════════"
-    echo ""
-    echo "Note: Use period (.) prefix in-game, no prefix in console"
     echo ""
     read -p "Press Enter to continue..."
 }
@@ -1623,26 +2017,20 @@ show_troubleshooting() {
     echo "═══════════════════════════════════════════════════════════"
     echo "SERVER WON'T START"
     echo "───────────────────"
-    echo "1. Check if ports 3724 and 8085 are available:"
-    echo "   netstat -tlnp | grep -E '3724|8085'"
-    echo ""
-    echo "2. Check MySQL is running:"
-    echo "   systemctl status mariadb"
-    echo ""
-    echo "3. Check logs in:"
-    echo "   $INSTALL_DIR/env/dist/bin/"
+    echo "1. Check ports: netstat -tlnp | grep -E '3724|8085'"
+    echo "2. Check MySQL: systemctl status mariadb"
+    echo "3. View logs: cd ~/azerothcore-wotlk/env/dist/bin && ./worldserver"
     echo ""
     echo "RESET ALL BOTS"
     echo "───────────────────"
     echo "1. Edit config: pb"
     echo "2. Set: AiPlayerbot.DeleteRandomBotAccounts = 1"
-    echo "3. Start server and wait"
+    echo "3. Start server, wait 5 minutes"
     echo "4. Set back to 0 and restart"
     echo ""
     echo "CLEAN REBUILD"
     echo "───────────────────"
-    echo "1. Remove build cache:"
-    echo "   rm -rf ~/azerothcore-wotlk/var/build"
+    echo "1. Remove build cache: rm -rf ~/azerothcore-wotlk/var/build"
     echo "2. Recompile: compile"
     echo ""
     echo "DATABASE RESET"
@@ -1655,19 +2043,12 @@ show_troubleshooting() {
     echo "   DROP DATABASE acore_world;"
     echo "3. Re-run installation"
     echo ""
-    echo "COMPILATION ERRORS"
+    echo "CLIENT CAN'T CONNECT"
     echo "───────────────────"
-    echo "1. Ensure you have enough RAM (4GB minimum)"
-    echo "2. Update dependencies: apt update && apt upgrade"
-    echo "3. Clean build directory: rm -rf var/build"
-    echo "4. Try full recompile: compile"
-    echo ""
-    echo "CLIENT CONNECTION ISSUES"
-    echo "───────────────────"
-    echo "1. Check realmlist.wtf has correct IP"
-    echo "2. Check firewall isn't blocking ports 3724/8085"
-    echo "3. Check router port forwarding (for internet)"
-    echo "4. Verify server is running: pgrep worldserver"
+    echo "1. Verify realmlist.wtf has correct IP"
+    echo "2. Check firewall isn't blocking"
+    echo "3. Check router port forwarding"
+    echo "4. Check server: pgrep worldserver"
     echo "═══════════════════════════════════════════════════════════"
     echo ""
     read -p "Press Enter to continue..."
