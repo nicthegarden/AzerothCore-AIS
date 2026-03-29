@@ -257,9 +257,11 @@ install_custom() {
     INSTALL_DIR=$(ask_input "Installation directory" "$HOME/azerothcore-wotlk")
     REALM_NAME=$(ask_input "Realm name" "My AzerothCore Realm")
     
-    print_status "Step 2/7: Admin Account Setup"
+    print_status "Step 2/7: Admin Account & Database Setup"
     ADMIN_USERNAME=$(ask_input "Admin username")
     ADMIN_PASSWORD=$(ask_input "Admin password")
+    ACORE_USER=$(ask_input "MySQL username" "acore")
+    ACORE_PASS=$(ask_input "MySQL password" "acore")
     
     print_status "Step 3/7: Server Type"
     echo "1) Normal (PvE)"
