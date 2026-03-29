@@ -606,7 +606,7 @@ step_clone_repos() {
     fi
     
     print_status "Cloning AzerothCore with Playerbots..."
-    git clone https://github.com/mod-playerbots/azerothcore-wotlk.git --branch=main "$INSTALL_DIR"
+    git clone https://github.com/mod-playerbots/azerothcore-wotlk.git "$INSTALL_DIR"
     
     if [ $? -ne 0 ]; then
         print_error "Failed to clone AzerothCore. Please check your internet connection."
@@ -615,7 +615,7 @@ step_clone_repos() {
     
     print_status "Cloning Playerbots module..."
     cd "$INSTALL_DIR/modules"
-    git clone https://github.com/mod-playerbots/mod-playerbots.git --branch=master
+    git clone https://github.com/mod-playerbots/mod-playerbots.git
     cd ../../..
     
     print_success "Repositories cloned"
