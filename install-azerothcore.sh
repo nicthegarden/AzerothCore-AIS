@@ -584,7 +584,15 @@ step_system_prep() {
     apt update -y
     
     print_status "Installing prerequisites..."
-    apt install -y git curl unzip sudo tmux nano net-tools mariadb-server mariadb-client build-essential cmake autoconf libbz2-dev liblzma-dev libssl-dev libncurses5-dev pkg-config libsqlite3-dev zlib1g-dev
+    apt install -y git curl unzip sudo tmux nano net-tools build-essential cmake autoconf libbz2-dev liblzma-dev libssl-dev libncurses5-dev pkg-config libsqlite3-dev zlib1g-dev
+
+    # Install MySQL/MariaDB if not already installed
+    if ! command -v mysql &> /dev/null; then
+        print_status "MySQL not found - installing MariaDB..."
+        apt install -y mariadb-server mariadb-client
+    else
+        print_status "MySQL/MariaDB already installed: $(mysql --version)"
+    fi
     
     # Check if running as root
     if [ "$EUID" -ne 0 ]; then
@@ -942,22 +950,72 @@ step_compile() {
 
 step_configure_mysql() {
     print_header "STEP 7/13: CONFIGURING MYSQL"
-    
-    # Configure MySQL for AzerothCore
+
+    # Detect which database service is in use
+    local db_service=""
+    local db_cnf_dir=""
+    if systemctl list-unit-files 2>/dev/null | grep -q '^mariadb'; then
+        db_service="mariadb"
+        db_cnf_dir="/etc/mysql/mariadb.conf.d"
+    elif systemctl list-unit-files 2>/dev/null | grep -q '^mysql'; then
+        db_service="mysql"
+        db_cnf_dir="/etc/mysql/mysql.conf.d"
+    else
+        db_service="mysql"
+        db_cnf_dir="/etc/mysql"
+    fi
+    print_status "Detected database service: $db_service (config dir: $db_cnf_dir)"
+
+    # Write config to the correct location
     print_status "Updating MySQL configuration..."
-    
-    cat >> /etc/mysql/mariadb.conf.d/50-server.cnf << 'MYSQLCNFEOF'
+    mkdir -p "$db_cnf_dir"
+    # Only add if not already present
+    if ! grep -q 'AzerothCore Configuration' "$db_cnf_dir"/*.cnf 2>/dev/null; then
+        cat >> "$db_cnf_dir/azerothcore.cnf" << 'MYSQLCNFEOF'
+[mysqld]
 # AzerothCore Configuration
 bind-address            = 0.0.0.0
-mysqlx-bind-address     = 0.0.0.0
-disable_log_bin
+sql_mode               = ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
 MYSQLCNFEOF
-    
-    systemctl restart mariadb
-    
+    fi
+
+    # Initialize MySQL data directory if needed (MySQL 8.x)
+    if [ "$db_service" = "mysql" ] && [ ! -d /var/lib/mysql/mysql ]; then
+        print_status "Initializing MySQL data directory..."
+        mysqld --initialize-insecure --user=mysql 2>/dev/null || true
+    fi
+
+    # Start the service
+    if systemctl start "$db_service" 2>/dev/null; then
+        print_status "$db_service started via systemctl"
+    else
+        print_warning "systemctl start failed, trying service command..."
+        service "$db_service" start 2>/dev/null || true
+    fi
+
+    # Wait for MySQL socket to appear
+    print_status "Waiting for MySQL socket (up to 60s)..."
+    local socket_wait=0
+    while [ $socket_wait -lt 60 ]; do
+        if [ -S /var/run/mysqld/mysqld.sock ] || mysqladmin ping --silent 2>/dev/null; then
+            print_success "MySQL is responding"
+            break
+        fi
+        sleep 1
+        socket_wait=$((socket_wait+1))
+        [ $((socket_wait % 10)) -eq 0 ] && echo -n "..."
+    done
+    echo ""
+
+    if ! mysqladmin ping --silent 2>/dev/null; then
+        print_error "MySQL did not start. Check: journalctl -xeu $db_service"
+        print_error "Installation cannot continue without a running database."
+        exit 1
+    fi
+
     # Create databases and user
     print_status "Creating databases and user..."
-    
+
     mysql -u root << MYSQLEOF
 DROP USER IF EXISTS '$ACORE_USER'@'localhost';
 CREATE USER '$ACORE_USER'@'localhost' IDENTIFIED BY '$ACORE_PASS' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0;
