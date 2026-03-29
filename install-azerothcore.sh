@@ -979,10 +979,21 @@ sql_mode               = ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
 MYSQLCNFEOF
     fi
 
-    # Initialize MySQL data directory if needed (MySQL 8.x)
-    if [ "$db_service" = "mysql" ] && [ ! -d /var/lib/mysql/mysql ]; then
-        print_status "Initializing MySQL data directory..."
-        mysqld --initialize-insecure --user=mysql 2>/dev/null || true
+    # Fix debian-start script permissions (commonly broken after pkg reinstalls)
+    [ -f /etc/mysql/debian-start ] && chmod +x /etc/mysql/debian-start || true
+
+    # Initialize MySQL/MariaDB data directory if missing or empty
+    if [ ! -d /var/lib/mysql/mysql ]; then
+        print_status "Initializing database data directory..."
+        rm -rf /var/lib/mysql/*
+        if [ "$db_service" = "mariadb" ]; then
+            mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql 2>/dev/null || \
+            mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql 2>/dev/null || true
+        else
+            mysqld --initialize-insecure --user=mysql 2>/dev/null || true
+        fi
+        chown -R mysql:mysql /var/lib/mysql
+        print_success "Data directory initialised"
     fi
 
     # Start the service
