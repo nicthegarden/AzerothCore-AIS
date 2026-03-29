@@ -1,10 +1,10 @@
 #!/bin/bash
-
 # AzerothCore WoW Server - Complete Installation Script for Debian 13
 # Based on 2025-2026 AzerothCore + Playerbots Guide
-# Version: 3.0 - Enhanced with 25+ modules
-
+# Version: 3.1 - FIXED ALL CRITICAL ISSUES
 set -e
+# Disable exit on error for git clone operations
+set +e
 
 # Colors for output
 RED='\033[0;31m'
@@ -29,7 +29,7 @@ ADMIN_PASSWORD=""
 
 # Feature flags
 INSTALL_MODULES=()
-SERVER_TYPE=""  # 0=PvE, 1=PvP, 6=RP, 7=RP-PvP
+SERVER_TYPE=1
 MIN_BOTS=400
 MAX_BOTS=500
 AUTOLOGIN=false
@@ -73,19 +73,15 @@ MOD_REWARD_SHOP=false
 # ============================================
 # UTILITY FUNCTIONS
 # ============================================
-
 print_status() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
-
 print_success() {
     echo -e "${GREEN}[SUCCESS]${NC} $1"
 }
-
 print_warning() {
     echo -e "${YELLOW}[WARNING]${NC} $1"
 }
-
 print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
@@ -131,7 +127,6 @@ ask_input() {
 # ============================================
 # MAIN MENU
 # ============================================
-
 show_main_menu() {
     print_header "AZEROTHCORE WOTLK SERVER - DEBIAN 13 INSTALLER"
     echo "A complete automated installation system for"
@@ -139,59 +134,35 @@ show_main_menu() {
     echo ""
     echo "Based on: 2025-2026 Complete Installation Guide"
     echo "Debian Version: 13 (Trixie)"
-    echo "Script Version: 3.0"
+    echo "Script Version: 3.1 (FIXED)"
     echo ""
     
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "  INSTALLATION OPTIONS"
-    echo "═══════════════════════════════════════════════════════════"
     echo ""
-    echo "  1) 🚀 FULL INSTALL - All Features & Modules"
-    echo "     → Installs everything with optimal settings"
-    echo "     → 500-1000 bots, 25+ modules, cross-faction"
     echo ""
-    echo "  2) ⚙️  CUSTOM INSTALL - Choose Your Features"
-    echo "     → Select specific modules and settings"
-    echo "     → Configure bot counts and server type"
-    echo ""
-    echo "  3) 🧹 WIPE & REINSTALL - Clean Slate"
-    echo "     → Removes existing installation"
-    echo "     → Fresh start with full backup option"
-    echo ""
-    echo "  4) 📦 INSTALL MODULES ONLY"
-    echo "     → Add modules to existing installation"
-    echo "     → Recompile after installation"
-    echo ""
-    echo "  5) 🔄 UPDATE EXISTING"
-    echo "     → Update AzerothCore and modules"
-    echo "     → Option to recompile"
-    echo ""
-    echo "  6) 🎮 SERVER MANAGEMENT"
-    echo "     → Start/Stop/Restart server"
-    echo "     → Create accounts, check status"
-    echo ""
-    echo "  7) 🔧 CONFIGURATION"
-    echo "     → Edit configs, change realm name"
-    echo "     → Set IP addresses"
-    echo ""
-    echo "  8) 📖 DOCUMENTATION"
-    echo "     → View installation guide"
-    echo "     → View module information"
-    echo ""
-    echo "  9) ❌ EXIT"
+    echo "  1)  FULL INSTALL - All Features & Modules"
+    echo "  2)   CUSTOM INSTALL - Choose Your Features"
+    echo "  3)  WIPE & REINSTALL - Clean Slate"
+    echo "  4)  INSTALL MODULES ONLY"
+    echo "  5)  UPDATE EXISTING"
+    echo "  6)  SERVER MANAGEMENT"
+    echo "  7)  CONFIGURATION"
+    echo "  8)  DOCUMENTATION"
+    echo "  9)  EXIT"
     echo ""
     
     local choice=$(ask_input "Enter your choice" "1")
     
     case $choice in
-        1) install_full ;;           # Full install with all features
-        2) install_custom ;;         # Custom installation
-        3) wipe_and_reinstall ;;     # Wipe and start fresh
-        4) install_modules_only ;;   # Modules only
-        5) update_existing ;;        # Update
-        6) server_management ;;      # Management
-        7) configuration ;;          # Config
-        8) show_documentation ;;     # Docs
+        1) install_full ;;
+        2) install_custom ;;
+        3) wipe_and_reinstall ;;
+        4) install_modules_only ;;
+        5) update_existing ;;
+        6) server_management ;;
+        7) configuration ;;
+        8) show_documentation ;;
         9) exit 0 ;;
         *) 
             print_error "Invalid choice"
@@ -203,21 +174,19 @@ show_main_menu() {
 # ============================================
 # FULL INSTALLATION - ALL FEATURES
 # ============================================
-
 install_full() {
-    print_header "🚀 FULL INSTALLATION - ALL FEATURES ENABLED"
+    print_header " FULL INSTALLATION - ALL FEATURES ENABLED"
     
-    print_status "This will install AzerothCore with ALL 25+ modules:"
+    print_status "This will install AzerothCore with ALL 25+ modules"
     echo ""
-    echo "✓ AzerothCore + Playerbots (500-1000 bots)"
-    echo "✓ All 25 modules (ARAC, Transmog, AH Bot, NPCs, etc.)"
-    echo "✓ Cross-faction everything (groups, guilds, chat, AH)"
-    echo "✓ Instant logout, quest tracker, enhanced visibility"
-    echo "✓ Flying mount item (learnable at level 1)"
-    echo "✓ NPC Buffer & Enchanter"
-    echo "✓ Weekend XP boost"
-    echo "✓ Anticheat protection"
-    echo "✓ PvP server type with all QoL features"
+    echo " AzerothCore + Playerbots (500-1000 bots)"
+    echo " All 25 modules installed"
+    echo " Cross-faction everything enabled"
+    echo " Instant logout, quest tracker, enhanced visibility"
+    echo " Flying mount item (learnable at level 1)"
+    echo " NPC Buffer & Enchanter"
+    echo " Weekend XP boost"
+    echo " Anticheat protection"
     echo ""
     
     if ! ask_yes_no "Proceed with full installation"; then
@@ -227,7 +196,7 @@ install_full() {
     
     # Set all features
     INSTALL_DIR="$HOME/azerothcore-wotlk"
-    SERVER_TYPE=1  # PvP
+    SERVER_TYPE=1
     MIN_BOTS=500
     MAX_BOTS=1000
     AUTOLOGIN=true
@@ -239,7 +208,7 @@ install_full() {
     QUEST_TRACKER=true
     ENABLE_FLYING_MOUNT=true
     
-    # Enable all original 10 modules
+    # Enable all modules
     MOD_NO_HEARTHSTONE=true
     MOD_ACCOUNT_MOUNTS=true
     MOD_ARAC=true
@@ -250,8 +219,6 @@ install_full() {
     MOD_AUTOBALANCE=true
     MOD_ELUNA=true
     MOD_CFBG=true
-    
-    # Enable all additional 15 modules
     MOD_SKIP_DK=true
     MOD_LEARN_SPELLS=true
     MOD_NPC_BUFFER=true
@@ -268,10 +235,8 @@ install_full() {
     MOD_CHALLENGE_MODES=true
     MOD_REWARD_SHOP=true
     
-    # Collect user information
     collect_user_info
     
-    # Show summary and confirm
     show_installation_summary
     
     if ! ask_yes_no "Begin installation"; then
@@ -279,28 +244,23 @@ install_full() {
         return
     fi
     
-    # Run installation steps
     run_installation_steps
 }
 
 # ============================================
 # CUSTOM INSTALLATION
 # ============================================
-
 install_custom() {
-    print_header "⚙️  CUSTOM INSTALLATION"
+    print_header "  CUSTOM INSTALLATION"
     
-    # Step 1: Basic Information
     print_status "Step 1/7: Basic Configuration"
     INSTALL_DIR=$(ask_input "Installation directory" "$HOME/azerothcore-wotlk")
     REALM_NAME=$(ask_input "Realm name" "My AzerothCore Realm")
     
-    # Step 2: Admin Account
     print_status "Step 2/7: Admin Account Setup"
     ADMIN_USERNAME=$(ask_input "Admin username")
     ADMIN_PASSWORD=$(ask_input "Admin password")
     
-    # Step 3: Server Type
     print_status "Step 3/7: Server Type"
     echo "1) Normal (PvE)"
     echo "2) PvP"
@@ -315,7 +275,6 @@ install_custom() {
         *) SERVER_TYPE=1 ;;
     esac
     
-    # Step 4: Network Configuration
     print_status "Step 4/7: Network Configuration"
     echo "1) LAN Only (Local network)"
     echo "2) Internet (Public access)"
@@ -328,7 +287,6 @@ install_custom() {
         SERVER_IP=$(ask_input "Local IP address" "192.168.1.100")
     fi
     
-    # Step 5: Playerbot Configuration
     print_status "Step 5/7: Playerbot Configuration"
     MIN_BOTS=$(ask_input "Minimum number of bots" "400")
     MAX_BOTS=$(ask_input "Maximum number of bots" "500")
@@ -337,7 +295,6 @@ install_custom() {
         AUTOLOGIN=true
     fi
     
-    # Step 6: Features
     print_status "Step 6/7: Feature Selection"
     
     if ask_yes_no "Enable cross-faction grouping"; then
@@ -368,13 +325,7 @@ install_custom() {
         ENABLE_FLYING_MOUNT=true
     fi
     
-    # Step 7: Module Selection
     print_status "Step 7/7: Module Selection"
-    echo ""
-    echo "═══════════════════════════════════════════════════════════"
-    echo "  ESSENTIAL MODULES"
-    echo "═══════════════════════════════════════════════════════════"
-    echo ""
     
     ask_yes_no "1. No Hearthstone Cooldown" && MOD_NO_HEARTHSTONE=true
     ask_yes_no "2. Account-Wide Mounts" && MOD_ACCOUNT_MOUNTS=true
@@ -386,12 +337,6 @@ install_custom() {
     ask_yes_no "8. Auto Balance" && MOD_AUTOBALANCE=true
     ask_yes_no "9. Eluna Lua Engine" && MOD_ELUNA=true
     ask_yes_no "10. Cross-Faction BGs" && MOD_CFBG=true
-    
-    echo ""
-    echo "═══════════════════════════════════════════════════════════"
-    echo "  QUALITY OF LIFE MODULES"
-    echo "═══════════════════════════════════════════════════════════"
-    echo ""
     
     ask_yes_no "11. Skip DK Starting Area" && MOD_SKIP_DK=true
     ask_yes_no "12. Auto-Learn Spells" && MOD_LEARN_SPELLS=true
@@ -409,7 +354,6 @@ install_custom() {
     ask_yes_no "24. Challenge Modes (Hardcore)" && MOD_CHALLENGE_MODES=true
     ask_yes_no "25. Reward Shop (Vote/Donation)" && MOD_REWARD_SHOP=true
     
-    # Show summary
     show_installation_summary
     
     if ask_yes_no "Begin installation"; then
@@ -422,9 +366,8 @@ install_custom() {
 # ============================================
 # WIPE AND REINSTALL
 # ============================================
-
 wipe_and_reinstall() {
-    print_header "🧹 WIPE AND REINSTALL"
+    print_header " WIPE AND REINSTALL"
     
     print_warning "This will DELETE your existing installation!"
     print_warning "Directory to be removed: $INSTALL_DIR"
@@ -471,12 +414,12 @@ wipe_and_reinstall() {
     # Remove databases
     if ask_yes_no "Also remove databases (acore_*)"; then
         print_status "Dropping databases..."
-        mysql -u root << 'EOF' 2>/dev/null || true
+        mysql -u root << 'SQLEOF' 2>/dev/null || true
 DROP DATABASE IF EXISTS acore_auth;
 DROP DATABASE IF EXISTS acore_characters;
 DROP DATABASE IF EXISTS acore_world;
 DROP DATABASE IF EXISTS acore_playerbots;
-EOF
+SQLEOF
         print_success "Databases removed"
     fi
     
@@ -512,7 +455,6 @@ EOF
 # ============================================
 # COLLECT USER INFORMATION
 # ============================================
-
 collect_user_info() {
     print_status "Collecting configuration information..."
     
@@ -553,9 +495,8 @@ collect_user_info() {
 # ============================================
 # SHOW INSTALLATION SUMMARY
 # ============================================
-
 show_installation_summary() {
-    print_header "📋 INSTALLATION SUMMARY"
+    print_header " INSTALLATION SUMMARY"
     
     echo -e "${CYAN}Server Configuration:${NC}"
     echo "  Installation Directory: $INSTALL_DIR"
@@ -597,116 +538,35 @@ show_installation_summary() {
     echo "  Quest Tracker: $QUEST_TRACKER"
     echo "  Flying Mount: $ENABLE_FLYING_MOUNT"
     echo ""
-    
-    echo -e "${CYAN}Essential Modules:${NC}"
-    [ "$MOD_NO_HEARTHSTONE" = true ] && echo "  ✓ No Hearthstone Cooldown"
-    [ "$MOD_ACCOUNT_MOUNTS" = true ] && echo "  ✓ Account-Wide Mounts"
-    [ "$MOD_ARAC" = true ] && echo "  ✓ All Races All Classes (ARAC)"
-    [ "$MOD_AH_BOT" = true ] && echo "  ✓ Auction House Bot"
-    [ "$MOD_TRANSMOG" = true ] && echo "  ✓ Transmogrification"
-    [ "$MOD_AOE_LOOT" = true ] && echo "  ✓ AoE Looting"
-    [ "$MOD_SOLO_LFG" = true ] && echo "  ✓ Solo LFG"
-    [ "$MOD_AUTOBALANCE" = true ] && echo "  ✓ Auto Balance"
-    [ "$MOD_ELUNA" = true ] && echo "  ✓ Eluna Lua Engine"
-    [ "$MOD_CFBG" = true ] && echo "  ✓ Cross-Faction BGs"
-    echo ""
-    
-    # Count additional modules
-    local additional_count=0
-    [ "$MOD_SKIP_DK" = true ] && ((additional_count++))
-    [ "$MOD_LEARN_SPELLS" = true ] && ((additional_count++))
-    [ "$MOD_NPC_BUFFER" = true ] && ((additional_count++))
-    [ "$MOD_NPC_ENCHANTER" = true ] && ((additional_count++))
-    [ "$MOD_WEEKEND_XP" = true ] && ((additional_count++))
-    [ "$MOD_DUEL_RESET" = true ] && ((additional_count++))
-    [ "$MOD_ANTICHEAT" = true ] && ((additional_count++))
-    [ "$MOD_GUILDHOUSE" = true ] && ((additional_count++))
-    [ "$MOD_WEAPON_VISUAL" = true ] && ((additional_count++))
-    [ "$MOD_REWARD_PLAYED_TIME" = true ] && ((additional_count++))
-    [ "$MOD_RESET_RAID_COOLDOWNS" = true ] && ((additional_count++))
-    [ "$MOD_GATHERING_EXP" = true ] && ((additional_count++))
-    [ "$MOD_CHANGEABLE_SPAWN_RATES" = true ] && ((additional_count++))
-    [ "$MOD_CHALLENGE_MODES" = true ] && ((additional_count++))
-    [ "$MOD_REWARD_SHOP" = true ] && ((additional_count++))
-    
-    if [ $additional_count -gt 0 ]; then
-        echo -e "${CYAN}Additional QoL Modules ($additional_count):${NC}"
-        [ "$MOD_SKIP_DK" = true ] && echo "  ✓ Skip DK Starting Area"
-        [ "$MOD_LEARN_SPELLS" = true ] && echo "  ✓ Auto-Learn Spells"
-        [ "$MOD_NPC_BUFFER" = true ] && echo "  ✓ NPC Buffer"
-        [ "$MOD_NPC_ENCHANTER" = true ] && echo "  ✓ NPC Enchanter"
-        [ "$MOD_WEEKEND_XP" = true ] && echo "  ✓ Weekend XP"
-        [ "$MOD_DUEL_RESET" = true ] && echo "  ✓ Duel Reset"
-        [ "$MOD_ANTICHEAT" = true ] && echo "  ✓ Anticheat"
-        [ "$MOD_GUILDHOUSE" = true ] && echo "  ✓ Guild House"
-        [ "$MOD_WEAPON_VISUAL" = true ] && echo "  ✓ Weapon Visual"
-        [ "$MOD_REWARD_PLAYED_TIME" = true ] && echo "  ✓ Reward Played Time"
-        [ "$MOD_RESET_RAID_COOLDOWNS" = true ] && echo "  ✓ Reset Raid Cooldowns"
-        [ "$MOD_GATHERING_EXP" = true ] && echo "  ✓ Gathering Experience"
-        [ "$MOD_CHANGEABLE_SPAWN_RATES" = true ] && echo "  ✓ Changeable Spawn Rates"
-        [ "$MOD_CHALLENGE_MODES" = true ] && echo "  ✓ Challenge Modes"
-        [ "$MOD_REWARD_SHOP" = true ] && echo "  ✓ Reward Shop"
-        echo ""
-    fi
-    
-    echo -e "${CYAN}Estimated Time:${NC} 20-50 minutes"
-    echo -e "${CYAN}Disk Space Required:${NC} ~50GB"
-    echo ""
 }
 
 # ============================================
 # RUN INSTALLATION STEPS
 # ============================================
-
 run_installation_steps() {
     local start_time=$(date +%s)
     
-    print_header "🚀 BEGINNING INSTALLATION"
+    print_header " BEGINNING INSTALLATION"
     
-    # Step 1: System Preparation
     step_system_prep
-    
-    # Step 2: Clone Repositories
     step_clone_repos
-    
-    # Step 3: Install Dependencies
     step_install_deps
-    
-    # Step 4: Install Modules
     step_install_modules
-    
-    # Step 5: Configure Build
     step_configure_build
-    
-    # Step 6: Compile
     step_compile
-    
-    # Step 7: Configure MySQL
     step_configure_mysql
-    
-    # Step 8: Download Client Data
     step_download_data
-    
-    # Step 9: Setup Configurations
     step_setup_configs
-    
-    # Step 10: Create Scripts
     step_create_scripts
-    
-    # Step 11: Database Hotfix
     step_database_hotfix
-    
-    # Step 12: Optional Flying Mount
     step_add_flying_mount
-    
-    # Step 13: Create Admin Account
     step_create_admin
     
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
     local minutes=$((duration / 60))
     
-    print_header "🎉 INSTALLATION COMPLETE!"
+    print_header " INSTALLATION COMPLETE!"
     print_success "Installation finished in $minutes minutes!"
     echo ""
     show_post_install_info
@@ -715,15 +575,14 @@ run_installation_steps() {
 # ============================================
 # INSTALLATION STEPS
 # ============================================
-
 step_system_prep() {
     print_header "STEP 1/13: SYSTEM PREPARATION"
     
     print_status "Updating package lists..."
-    apt update
+    apt update -y
     
     print_status "Installing prerequisites..."
-    apt install -y git curl unzip sudo tmux nano net-tools mariadb-server mariadb-client
+    apt install -y git curl unzip sudo tmux nano net-tools mariadb-server mariadb-client build-essential cmake autoconf libbz2-dev liblzma-dev libssl-dev libncurses5-dev pkg-config libsqlite3-dev zlib1g-dev
     
     # Check if running as root
     if [ "$EUID" -ne 0 ]; then
@@ -747,11 +606,17 @@ step_clone_repos() {
     fi
     
     print_status "Cloning AzerothCore with Playerbots..."
-    git clone https://github.com/mod-playerbots/azerothcore-wotlk.git --branch=Playerbot "$INSTALL_DIR"
+    git clone https://github.com/mod-playerbots/azerothcore-wotlk.git --branch=main "$INSTALL_DIR"
+    
+    if [ $? -ne 0 ]; then
+        print_error "Failed to clone AzerothCore. Please check your internet connection."
+        exit 1
+    fi
     
     print_status "Cloning Playerbots module..."
     cd "$INSTALL_DIR/modules"
     git clone https://github.com/mod-playerbots/mod-playerbots.git --branch=master
+    cd ../../..
     
     print_success "Repositories cloned"
 }
@@ -765,7 +630,7 @@ step_install_deps() {
     if [ -f /etc/debian_version ]; then
         print_status "Configuring for Debian..."
         if [ -f "conf/dist/config.sh" ]; then
-            sed -i 's/# OSDISTRO="ubuntu"/OSDISTRO="debian"/' conf/dist/config.sh
+            sed -i 's/# OSDISTRO="ubuntu"/OSDISTRO="debian"/' conf/dist/config.sh 2>/dev/null || true
         fi
     fi
     
@@ -780,6 +645,11 @@ step_install_modules() {
     
     cd "$INSTALL_DIR/modules"
     local module_count=0
+    
+    # Create directories for SQL files
+    mkdir -p "$INSTALL_DIR/data/sql/updates/db_auth/"
+    mkdir -p "$INSTALL_DIR/data/sql/updates/db_characters/"
+    mkdir -p "$INSTALL_DIR/data/sql/updates/db_world/"
     
     # Module 1: No Hearthstone Cooldown
     if [ "$MOD_NO_HEARTHSTONE" = true ]; then
@@ -815,10 +685,14 @@ step_install_modules() {
         print_status "Installing mod-transmog..."
         git clone https://github.com/azerothcore/mod-transmog.git 2>/dev/null || true
         # Copy SQL files
-        cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-auth/acore_cms_subscriptions.sql" \
-           "$INSTALL_DIR/data/sql/updates/db_auth/" 2>/dev/null || true
-        cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-characters/trasmorg.sql" \
-           "$INSTALL_DIR/data/sql/updates/db_characters/" 2>/dev/null || true
+        if [ -f "$INSTALL_DIR/modules/mod-transmog/data/sql/db-auth/acore_cms_subscriptions.sql" ]; then
+            cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-auth/acore_cms_subscriptions.sql" \
+               "$INSTALL_DIR/data/sql/updates/db_auth/"
+        fi
+        if [ -f "$INSTALL_DIR/modules/mod-transmog/data/sql/db-characters/trasmorg.sql" ]; then
+            cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-characters/trasmorg.sql" \
+               "$INSTALL_DIR/data/sql/updates/db_characters/"
+        fi
         cp "$INSTALL_DIR/modules/mod-transmog/data/sql/db-world/"*.sql \
            "$INSTALL_DIR/data/sql/updates/db_world/" 2>/dev/null || true
         ((module_count++))
@@ -994,8 +868,7 @@ step_configure_build() {
     [ "$QUEST_TRACKER" = true ] && echo "Quests.EnableQuestTracker = 1" >> env/dist/etc/worldserver.conf
     
     # Additional settings
-    cat >> env/dist/etc/worldserver.conf << 'EOF'
-
+    cat >> env/dist/etc/worldserver.conf << 'CONFEOF'
 # Additional AzerothCore Settings
 AllowTwoSide.Accounts = 1
 PlayerLimit = 0
@@ -1011,13 +884,12 @@ StrictNames.Reserved = 0
 StrictNames.Profanity = 0
 PreventAFKLogout = 2
 Warden.Enabled = 0
-EOF
+CONFEOF
     
     # Configure playerbots.conf
     print_status "Configuring playerbots.conf..."
     
-    cat >> env/dist/etc/modules/playerbots.conf << EOF
-
+    cat >> env/dist/etc/modules/playerbots.conf << PBEOF
 # Playerbot Configuration
 AiPlayerbot.MinRandomBots = $MIN_BOTS
 AiPlayerbot.MaxRandomBots = $MAX_BOTS
@@ -1039,7 +911,7 @@ AiPlayerbot.RandomBotAutoJoinBG = 1
 PlayerbotsDatabase.WorkerThreads = 4
 PlayerbotsDatabase.SynchThreads = 4
 AiPlayerbot.BotActiveAlone = 100
-EOF
+PBEOF
     
     # Copy module configs
     print_status "Copying module configuration files..."
@@ -1072,20 +944,19 @@ step_configure_mysql() {
     # Configure MySQL for AzerothCore
     print_status "Updating MySQL configuration..."
     
-    cat >> /etc/mysql/mariadb.conf.d/50-server.cnf << 'EOF'
-
+    cat >> /etc/mysql/mariadb.conf.d/50-server.cnf << 'MYSQLCNFEOF'
 # AzerothCore Configuration
 bind-address            = 0.0.0.0
 mysqlx-bind-address     = 0.0.0.0
 disable_log_bin
-EOF
+MYSQLCNFEOF
     
     systemctl restart mariadb
     
     # Create databases and user
     print_status "Creating databases and user..."
     
-    mysql -u root << EOF
+    mysql -u root << MYSQLEOF
 DROP USER IF EXISTS '$ACORE_USER'@'localhost';
 CREATE USER '$ACORE_USER'@'localhost' IDENTIFIED BY '$ACORE_PASS' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0;
 GRANT ALL PRIVILEGES ON * . * TO '$ACORE_USER'@'localhost' WITH GRANT OPTION;
@@ -1097,7 +968,7 @@ GRANT ALL PRIVILEGES ON \`acore_world\` . * TO '$ACORE_USER'@'localhost' WITH GR
 GRANT ALL PRIVILEGES ON \`acore_characters\` . * TO '$ACORE_USER'@'localhost' WITH GRANT OPTION;
 GRANT ALL PRIVILEGES ON \`acore_auth\` . * TO '$ACORE_USER'@'localhost' WITH GRANT OPTION;
 GRANT ALL PRIVILEGES ON \`acore_playerbots\` . * TO '$ACORE_USER'@'localhost' WITH GRANT OPTION;
-EOF
+MYSQLEOF
     
     print_success "MySQL configured"
 }
@@ -1126,7 +997,7 @@ step_setup_configs() {
     print_status "Setting realm configuration..."
     
     # Wait for databases to be ready
-    sleep 2
+    sleep 5
     
     mysql -u root acore_auth -e "UPDATE realmlist SET name = '$REALM_NAME' WHERE id = 1;" 2>/dev/null || true
     mysql -u root acore_auth -e "UPDATE realmlist SET address = '$SERVER_IP' WHERE id = 1;" 2>/dev/null || true
@@ -1138,47 +1009,41 @@ step_create_scripts() {
     print_header "STEP 10/13: CREATING MANAGEMENT SCRIPTS"
     
     # Create start script
-    cat > /root/start.sh << 'EOF'
+    cat > /root/start.sh << 'STARTEOF'
 #!/bin/bash
 cd ~/azerothcore-wotlk/env/dist/bin
 authserver="./authserver"
 worldserver="./worldserver"
-
 authserver_session="auth-session"
 worldserver_session="world-session"
-
 if tmux new-session -d -s $authserver_session; then
     echo "Created authserver session: $authserver_session"
 else
     echo "Error when trying to create authserver session: $authserver_session"
 fi
-
 if tmux new-session -d -s $worldserver_session; then
     echo "Created worldserver session: $worldserver_session"
 else
     echo "Error when trying to create worldserver session: $worldserver_session"
 fi
-
 if tmux send-keys -t $authserver_session "$authserver" C-m; then
     echo "Executed \"$authserver\" inside $authserver_session"
     echo "You can attach to $authserver_session using \"tmux attach -t $authserver_session\""
 else
     echo "Error when executing \"$authserver\" inside $authserver_session"
 fi
-
 if tmux send-keys -t $worldserver_session "$worldserver" C-m; then
     echo "Executed \"$worldserver\" inside $worldserver_session"
     echo "You can attach to $worldserver_session using \"tmux attach -t $worldserver_session\""
 else
     echo "Error when executing \"$worldserver\" inside $worldserver_session"
 fi
-EOF
+STARTEOF
     
     chmod +x /root/start.sh
     
     # Add aliases to bashrc
-    cat >> ~/.bashrc << 'EOF'
-
+    cat >> ~/.bashrc << 'ALIASEOF'
 # AzerothCore Aliases
 alias wow='cd ~/azerothcore-wotlk; tmux attach -t world-session'
 alias auth='cd ~/azerothcore-wotlk; tmux attach -t auth-session'
@@ -1193,7 +1058,7 @@ alias authconf='nano ~/azerothcore-wotlk/env/dist/etc/authserver.conf'
 alias updatemods="cd ~/azerothcore-wotlk/modules; find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;"
 alias ah='nano ~/azerothcore-wotlk/env/dist/etc/modules/mod_ahbot.conf'
 alias tm='nano ~/azerothcore-wotlk/env/dist/etc/modules/transmog.conf'
-EOF
+ALIASEOF
     
     # Source bashrc for current session
     source ~/.bashrc
@@ -1227,10 +1092,10 @@ step_add_flying_mount() {
     
     print_status "Creating Tome of World Flying item (Item ID: 701000)..."
     
-    mysql -u root acore_world << 'EOF'
+    mysql -u root acore_world << 'MOUNTEOF'
 DELETE FROM `item_template` WHERE `entry`=701000;
 INSERT INTO `item_template` (`entry`, `class`, `subclass`, `SoundOverrideSubclass`, `name`, `displayid`, `Quality`, `Flags`, `FlagsExtra`, `BuyCount`, `BuyPrice`, `SellPrice`, `InventoryType`, `AllowableClass`, `AllowableRace`, `ItemLevel`, `RequiredLevel`, `RequiredSkill`, `RequiredSkillRank`, `requiredspell`, `requiredhonorrank`, `RequiredCityRank`, `RequiredReputationFaction`, `RequiredReputationRank`, `maxcount`, `stackable`, `ContainerSlots`, `stat_type1`, `stat_value1`, `stat_type2`, `stat_value2`, `stat_type3`, `stat_value3`, `stat_type4`, `stat_value4`, `stat_type5`, `stat_value5`, `stat_type6`, `stat_value6`, `stat_type7`, `stat_value7`, `stat_type8`, `stat_value8`, `stat_type9`, `stat_value9`, `stat_type10`, `stat_value10`, `ScalingStatDistribution`, `ScalingStatValue`, `dmg_min1`, `dmg_max1`, `dmg_type1`, `dmg_min2`, `dmg_max2`, `dmg_type2`, `armor`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `delay`, `ammo_type`, `RangedModRange`, `spellid_1`, `spelltrigger_1`, `spellcharges_1`, `spellppmRate_1`, `spellcooldown_1`, `spellcategory_1`, `spellcategorycooldown_1`, `spellid_2`, `spelltrigger_2`, `spellcharges_2`, `spellppmRate_2`, `spellcooldown_2`, `spellcategory_2`, `spellcategorycooldown_2`, `spellid_3`, `spelltrigger_3`, `spellcharges_3`, `spellppmRate_3`, `spellcooldown_3`, `spellcategory_3`, `spellcategorycooldown_3`, `spellid_4`, `spelltrigger_4`, `spellcharges_4`, `spellppmRate_4`, `spellcooldown_4`, `spellcategory_4`, `spellcategorycooldown_4`, `spellid_5`, `spelltrigger_5`, `spellcharges_5`, `spellppmRate_5`, `spellcooldown_5`, `spellcategory_5`, `spellcategorycooldown_5`, `bonding`, `description`, `PageText`, `LanguageID`, `PageMaterial`, `startquest`, `lockid`, `Material`, `sheath`, `RandomProperty`, `RandomSuffix`, `block`, `itemset`, `MaxDurability`, `area`, `Map`, `BagFamily`, `TotemCategory`, `socketColor_1`, `socketContent_1`, `socketColor_2`, `socketContent_2`, `socketColor_3`, `socketContent_3`, `socketBonus`, `GemProperties`, `RequiredDisenchantSkill`, `ArmorDamageModifier`, `duration`, `ItemLimitCategory`, `HolidayId`, `ScriptName`, `DisenchantID`, `FoodType`, `minMoneyLoot`, `maxMoneyLoot`, `flagsCustom`, `VerifiedBuild`) VALUES (701000, 9, 0, -1, 'Tome of World Flying', 61330, 7, 134217792, 0, 1, 4500000, 4500000, 0, -1, -1, 80, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 483, 0, -1, 0, -1, 0, -1, 31700, 6, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 'Learn to fly everywhere', 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 1);
-EOF
+MOUNTEOF
     
     print_success "Flying mount item created!"
     print_status "Use in-game GM command: .additem 701000"
@@ -1252,7 +1117,7 @@ step_create_admin() {
     tmux new-session -d -s world-session './worldserver'
     
     print_status "Waiting for database initialization (this may take a few minutes)..."
-    sleep 10
+    sleep 30
     
     # Wait for worldserver to be ready
     local attempts=0
@@ -1302,28 +1167,27 @@ step_create_admin() {
 # ============================================
 # POST-INSTALL INFORMATION
 # ============================================
-
 show_post_install_info() {
     echo ""
-    echo "═══════════════════════════════════════════════════════════"
-    echo "  🎉 AZEROTHCORE SERVER INSTALLATION COMPLETE! 🎉"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
+    echo "   AZEROTHCORE SERVER INSTALLATION COMPLETE! "
+    echo ""
     echo ""
     
-    echo -e "${CYAN}🌐 SERVER ACCESS:${NC}"
+    echo -e "${CYAN} SERVER ACCESS:${NC}"
     echo "  Realm Name: $REALM_NAME"
     echo "  Server IP: $SERVER_IP"
     echo "  Auth Port: 3724"
     echo "  World Port: 8085"
     echo ""
     
-    echo -e "${CYAN}👤 ADMIN ACCOUNT:${NC}"
+    echo -e "${CYAN} ADMIN ACCOUNT:${NC}"
     echo "  Username: $ADMIN_USERNAME"
     echo "  Password: [hidden]"
     echo "  GM Level: 3 (Full Administrator)"
     echo ""
     
-    echo -e "${CYAN}🎮 NEXT STEPS:${NC}"
+    echo -e "${CYAN} NEXT STEPS:${NC}"
     echo ""
     echo "1. Start the server:"
     echo "   $ start"
@@ -1339,7 +1203,7 @@ show_post_install_info() {
     echo "4. Login with your admin account"
     echo ""
     
-    echo -e "${CYAN}🔧 USEFUL COMMANDS:${NC}"
+    echo -e "${CYAN} USEFUL COMMANDS:${NC}"
     echo "  start      - Start auth & world servers"
     echo "  stop       - Stop all servers"
     echo "  wow        - Attach to world server console"
@@ -1353,14 +1217,14 @@ show_post_install_info() {
     echo ""
     
     if [ "$ENABLE_FLYING_MOUNT" = true ]; then
-        echo -e "${CYAN}🐉 FLYING MOUNT:${NC}"
+        echo -e "${CYAN} FLYING MOUNT:${NC}"
         echo "  Item ID: 701000 (Tome of World Flying)"
         echo "  In-game GM command: .additem 701000"
         echo ""
     fi
     
     if [ "$MOD_ARAC" = true ]; then
-        echo -e "${CYAN}⚠️  ARAC MODULE:${NC}"
+        echo -e "${CYAN}  ARAC MODULE:${NC}"
         echo "  Download Patch-A.MPQ from:"
         echo "  https://github.com/heyitsbench/mod-arac"
         echo "  Place it in your WoW client Data folder"
@@ -1368,7 +1232,7 @@ show_post_install_info() {
     fi
     
     if [ "$MOD_AH_BOT" = true ]; then
-        echo -e "${CYAN}🏛️  AUCTION HOUSE BOT:${NC}"
+        echo -e "${CYAN}  AUCTION HOUSE BOT:${NC}"
         echo "  Setup required:"
         echo "  1. Start server: start"
         echo "  2. Attach: wow"
@@ -1381,43 +1245,43 @@ show_post_install_info() {
     fi
     
     if [ "$MOD_TRANSMOG" = true ]; then
-        echo -e "${CYAN}✨ TRANSMOG MODULE:${NC}"
+        echo -e "${CYAN} TRANSMOG MODULE:${NC}"
         echo "  In-game GM command: .npc add 190010"
         echo "  Edit config: tm"
         echo ""
     fi
     
     if [ "$MOD_NPC_BUFFER" = true ] || [ "$MOD_NPC_ENCHANTER" = true ]; then
-        echo -e "${CYAN}🧙 NPC MODULES:${NC}"
+        echo -e "${CYAN} NPC MODULES:${NC}"
         [ "$MOD_NPC_BUFFER" = true ] && echo "  Buffer NPC: .npc add 601016"
         [ "$MOD_NPC_ENCHANTER" = true ] && echo "  Enchanter NPC: .npc add 601015"
         echo ""
     fi
     
     if [ "$MOD_GUILDHOUSE" = true ]; then
-        echo -e "${CYAN}🏰 GUILD HOUSE:${NC}"
+        echo -e "${CYAN} GUILD HOUSE:${NC}"
         echo "  Purchase guild house with: .guildhouse purchase"
         echo "  Teleport with: .guildhouse tele"
         echo ""
     fi
     
     if [ "$MOD_CHALLENGE_MODES" = true ]; then
-        echo -e "${CYAN}⚔️  CHALLENGE MODES:${NC}"
+        echo -e "${CYAN}  CHALLENGE MODES:${NC}"
         echo "  Enable hardcore: .challenge hardcore"
         echo "  Check status: .challenge"
         echo ""
     fi
     
     if [ -n "$EXTERNAL_IP" ]; then
-        echo -e "${CYAN}🌐 INTERNET ACCESS:${NC}"
+        echo -e "${CYAN} INTERNET ACCESS:${NC}"
         echo "  External IP: $EXTERNAL_IP"
         echo "  Remember to forward ports 3724 and 8085!"
         echo ""
     fi
     
-    echo "═══════════════════════════════════════════════════════════"
-    echo "  📖 Documentation: $SCRIPT_DIR/ADDITIONAL_MODULES.md"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
+    echo "   Documentation: $SCRIPT_DIR/ADDITIONAL_MODULES.md"
+    echo ""
     echo ""
     
     read -p "Press Enter to return to main menu..."
@@ -1427,9 +1291,8 @@ show_post_install_info() {
 # ============================================
 # MODULES ONLY INSTALLATION
 # ============================================
-
 install_modules_only() {
-    print_header "📦 INSTALL MODULES ONLY"
+    print_header " INSTALL MODULES ONLY"
     
     if [ ! -d "$INSTALL_DIR" ]; then
         print_error "AzerothCore not found at $INSTALL_DIR"
@@ -1441,9 +1304,9 @@ install_modules_only() {
     
     print_status "Available modules:"
     echo ""
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "  ESSENTIAL MODULES (1-10)"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "1) No Hearthstone Cooldown"
     echo "2) Account-Wide Mounts"
     echo "3) All Races All Classes (ARAC)"
@@ -1455,9 +1318,9 @@ install_modules_only() {
     echo "9) Eluna Lua Engine"
     echo "10) Cross-Faction BGs"
     echo ""
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "  QUALITY OF LIFE MODULES (11-25)"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "11) Skip DK Starting Area"
     echo "12) Auto-Learn Spells"
     echo "13) NPC Buffer (Free buffs)"
@@ -1474,9 +1337,9 @@ install_modules_only() {
     echo "24) Challenge Modes (Hardcore)"
     echo "25) Reward Shop (Vote/Donation)"
     echo ""
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "  BULK OPTIONS"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "26) Install ALL essential modules (1-10)"
     echo "27) Install ALL modules (1-25)"
     echo ""
@@ -1700,9 +1563,8 @@ install_modules_only() {
 # ============================================
 # UPDATE EXISTING
 # ============================================
-
 update_existing() {
-    print_header "🔄 UPDATE EXISTING INSTALLATION"
+    print_header " UPDATE EXISTING INSTALLATION"
     
     if [ ! -d "$INSTALL_DIR" ]; then
         print_error "Installation not found at $INSTALL_DIR"
@@ -1739,9 +1601,8 @@ update_existing() {
 # ============================================
 # SERVER MANAGEMENT
 # ============================================
-
 server_management() {
-    print_header "🎮 SERVER MANAGEMENT"
+    print_header " SERVER MANAGEMENT"
     
     echo "1) Start Server"
     echo "2) Stop Server"
@@ -1785,7 +1646,7 @@ server_management() {
         6)
             echo ""
             echo "Server Status:"
-            echo "─────────────"
+            echo ""
             if pgrep -f authserver > /dev/null; then
                 print_success "Auth Server: RUNNING"
             else
@@ -1819,9 +1680,8 @@ server_management() {
 # ============================================
 # CONFIGURATION
 # ============================================
-
 configuration() {
-    print_header "🔧 CONFIGURATION"
+    print_header " CONFIGURATION"
     
     echo "1) Change Realm Name"
     echo "2) Set Server IP (LAN)"
@@ -1877,9 +1737,8 @@ configuration() {
 # ============================================
 # DOCUMENTATION
 # ============================================
-
 show_documentation() {
-    print_header "📖 DOCUMENTATION"
+    print_header " DOCUMENTATION"
     
     echo "1) View Installation Guide (INSTALL_GUIDE.md)"
     echo "2) View Additional Modules (ADDITIONAL_MODULES.md)"
@@ -1927,9 +1786,9 @@ show_documentation() {
 show_module_info() {
     print_header "MODULE INFORMATION"
     
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "ESSENTIAL MODULES"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "1. mod-no-hearthstone-cooldown - Remove hearthstone cooldown"
     echo "2. mod-account-mounts - Account-wide mounts"
     echo "3. mod-arac - All Races All Classes (Human Druids, etc.)"
@@ -1941,9 +1800,9 @@ show_module_info() {
     echo "9. mod-eluna - Lua scripting engine"
     echo "10. mod-cfbg - Cross-faction battlegrounds"
     echo ""
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "QUALITY OF LIFE MODULES"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "11. mod-skip-dk-starting-area - Skip DK tutorial zone"
     echo "12. mod-learn-spells - Auto-learn spells on levelup"
     echo "13. mod-npc-buffer - Free buff NPC (.npc add 601016)"
@@ -1959,7 +1818,7 @@ show_module_info() {
     echo "23. mod-changeablespawnrates - Dynamic mob spawns"
     echo "24. mod-challenge-modes - Hardcore/Ironman modes"
     echo "25. mod-reward-shop - Vote/donation shop"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo ""
     read -p "Press Enter to continue..."
 }
@@ -1967,23 +1826,23 @@ show_module_info() {
 show_gm_commands() {
     print_header "GM COMMANDS REFERENCE"
     
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "ACCOUNT MANAGEMENT"
-    echo "───────────────────"
+    echo ""
     echo "account create <user> <pass>    - Create new account"
     echo "account set gmlevel <user> 3 -1 - Make user GM (level 3)"
     echo "account set password <user> <newpass> <newpass> - Change password"
     echo "account onlinelist              - List online accounts"
     echo ""
     echo "SERVER CONTROL"
-    echo "───────────────────"
+    echo ""
     echo "server shutdown <seconds>       - Shutdown server"
     echo "server restart <seconds>        - Restart server"
     echo "announce <message>              - Send global announcement"
     echo "notify <message>                - Send notification"
     echo ""
     echo "ITEMS & CHARACTER"
-    echo "───────────────────"
+    echo ""
     echo ".add <itemid>                   - Add item to target"
     echo ".additem 701000                 - Add flying mount tome"
     echo ".level <level>                  - Set level"
@@ -1992,21 +1851,21 @@ show_gm_commands() {
     echo ".god on/off                     - God mode"
     echo ""
     echo "NPC MODULES"
-    echo "───────────────────"
+    echo ""
     echo ".npc add 601016                 - Buffer NPC"
     echo ".npc add 601015                 - Enchanter NPC"
     echo ".npc add 190010                 - Transmog NPC"
     echo ""
     echo "GUILD HOUSE"
-    echo "───────────────────"
+    echo ""
     echo ".guildhouse purchase            - Buy guild house"
     echo ".guildhouse tele                - Teleport to guild house"
     echo ""
     echo "CHALLENGE MODES"
-    echo "───────────────────"
+    echo ""
     echo ".challenge hardcore             - Enable hardcore mode"
     echo ".challenge                      - Check challenge status"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo ""
     read -p "Press Enter to continue..."
 }
@@ -2014,27 +1873,27 @@ show_gm_commands() {
 show_troubleshooting() {
     print_header "TROUBLESHOOTING"
     
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo "SERVER WON'T START"
-    echo "───────────────────"
+    echo ""
     echo "1. Check ports: netstat -tlnp | grep -E '3724|8085'"
     echo "2. Check MySQL: systemctl status mariadb"
     echo "3. View logs: cd ~/azerothcore-wotlk/env/dist/bin && ./worldserver"
     echo ""
     echo "RESET ALL BOTS"
-    echo "───────────────────"
+    echo ""
     echo "1. Edit config: pb"
     echo "2. Set: AiPlayerbot.DeleteRandomBotAccounts = 1"
     echo "3. Start server, wait 5 minutes"
     echo "4. Set back to 0 and restart"
     echo ""
     echo "CLEAN REBUILD"
-    echo "───────────────────"
+    echo ""
     echo "1. Remove build cache: rm -rf ~/azerothcore-wotlk/var/build"
     echo "2. Recompile: compile"
     echo ""
     echo "DATABASE RESET"
-    echo "───────────────────"
+    echo ""
     echo "1. Stop server: stop"
     echo "2. Drop databases:"
     echo "   mysql -u root"
@@ -2044,12 +1903,12 @@ show_troubleshooting() {
     echo "3. Re-run installation"
     echo ""
     echo "CLIENT CAN'T CONNECT"
-    echo "───────────────────"
+    echo ""
     echo "1. Verify realmlist.wtf has correct IP"
     echo "2. Check firewall isn't blocking"
     echo "3. Check router port forwarding"
     echo "4. Check server: pgrep worldserver"
-    echo "═══════════════════════════════════════════════════════════"
+    echo ""
     echo ""
     read -p "Press Enter to continue..."
 }
@@ -2057,7 +1916,6 @@ show_troubleshooting() {
 # ============================================
 # SCRIPT ENTRY POINT
 # ============================================
-
 check_root() {
     if [ "$EUID" -ne 0 ]; then
         print_error "This script must be run as root (use sudo)"
